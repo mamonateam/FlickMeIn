@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
 import com.codepath.apps.restclienttemplate.utils.BlurTransform;
 import com.codepath.oauth.OAuthLoginActivity;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
@@ -27,14 +30,13 @@ public class LoginActivity extends OAuthLoginActivity<FlickrClient> {
 
         ivBackground = (ImageView) findViewById(R.id.ivBackground);
 
-        FlickrClientApp.getRestClient().getOneInterestingPhoto(new JsonHttpResponseHandler() {
+        PublicFlickrClient.getOneInterestingPhoto(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     FlickrPhoto fp = new FlickrPhoto(response.getJSONObject("photos").getJSONArray("photo").getJSONObject(0));
                     Picasso.with(LoginActivity.this)
                             .load(fp.getUrl())
-//                            .centerCrop()
                             .transform(new BlurTransform(LoginActivity.this))
                             .into(ivBackground);
                 } catch (JSONException e) {
@@ -59,7 +61,7 @@ public class LoginActivity extends OAuthLoginActivity<FlickrClient> {
 	
     @Override
     public void onLoginSuccess() {
-    	Intent i = new Intent(this, PhotosActivity.class);
+    	Intent i = new Intent(this, NewAlbumActivity.class);
     	startActivity(i);
     }
 
