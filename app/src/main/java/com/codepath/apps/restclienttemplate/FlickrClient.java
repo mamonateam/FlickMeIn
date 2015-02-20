@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.scribe.builder.api.Api;
@@ -26,4 +27,13 @@ public class FlickrClient extends OAuthBaseClient {
         Log.d("DEBUG", "Sending API call to " + apiUrl);
         client.get(apiUrl, null, handler);
     }
+
+    // Unauthorized call
+    public void getOneInterestingPhoto(AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("?method=flickr.interestingness.getList&per_page=1&page=1&format=json&nojsoncallback=1&api_key=2f02a4b3865e3d5031b751b2938dec5d");
+        Log.d("DEBUG", "Sending API call to " + apiUrl);
+        AsyncHttpClient c = new AsyncHttpClient();
+        c.get(apiUrl, null, handler);
+    }
+
 }
