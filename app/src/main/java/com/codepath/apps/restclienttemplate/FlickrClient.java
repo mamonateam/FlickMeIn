@@ -1,19 +1,19 @@
 package com.codepath.apps.restclienttemplate;
 
-import org.scribe.builder.api.Api;
-import org.scribe.builder.api.FlickrApi;
-
 import android.content.Context;
 import android.util.Log;
 
 import com.codepath.oauth.OAuthBaseClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.scribe.builder.api.Api;
+import org.scribe.builder.api.FlickrApi;
+
 public class FlickrClient extends OAuthBaseClient {
     public static final Class<? extends Api> REST_API_CLASS = FlickrApi.class;
     public static final String REST_URL = "http://www.flickr.com/services";
-    public static final String REST_CONSUMER_KEY = "57ac210e2e82195e071f9a761d763ca0";
-    public static final String REST_CONSUMER_SECRET = "7d359e4f4149545b";
+    public static final String REST_CONSUMER_KEY = "2f02a4b3865e3d5031b751b2938dec5d";
+    public static final String REST_CONSUMER_SECRET = "409f82d889991535";
     public static final String REST_CALLBACK_URL = "oauth://cprest";
     
     public FlickrClient(Context context) {
@@ -22,7 +22,7 @@ public class FlickrClient extends OAuthBaseClient {
     }
 
     public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("?&format=json&nojsoncallback=1&api_key="YOUR API KEY HERE"&method=flickr.interestingness.getList");
+        String apiUrl = getApiUrl("?&format=json&nojsoncallback=1&method=flickr.interestingness.getList");
         Log.d("DEBUG", "Sending API call to " + apiUrl);
         client.get(apiUrl, null, handler);
     }

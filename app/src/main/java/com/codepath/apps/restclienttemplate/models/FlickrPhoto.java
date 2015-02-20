@@ -1,14 +1,14 @@
 package com.codepath.apps.restclienttemplate.models;
 
-import java.util.ArrayList;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.activeandroid.query.Select;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 @Table(name = "photos")
 public class FlickrPhoto extends Model { 
@@ -41,7 +41,7 @@ public class FlickrPhoto extends Model {
 	   return new Select().from(FlickrPhoto.class).where("uid = ?", uid).executeSingle();
 	}
 	
-	public static ArrayList<FlickrPhoto> recentItems() {
+	public static List<FlickrPhoto> recentItems() {
       return new Select().from(FlickrPhoto.class).orderBy("id DESC").limit("300").execute();
 	}
 	

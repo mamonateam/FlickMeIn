@@ -1,10 +1,5 @@
 package com.codepath.apps.restclienttemplate;
 
-import java.util.List;
-
-import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +7,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+
+import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class PhotoArrayAdapter extends ArrayAdapter<FlickrPhoto> {
 	public PhotoArrayAdapter(Context context, List<FlickrPhoto> photoList) {
@@ -23,7 +23,6 @@ public class PhotoArrayAdapter extends ArrayAdapter<FlickrPhoto> {
 		FlickrPhoto photo = this.getItem(position);
 		LinearLayout itemView;
 		ImageView ivImage;
-		ImageLoader imageLoader = ImageLoader.getInstance();
         if (convertView == null) {
     		LayoutInflater inflator = LayoutInflater.from(getContext());
     		itemView = (LinearLayout) inflator.inflate(R.layout.photo_item, parent, false);
@@ -32,7 +31,7 @@ public class PhotoArrayAdapter extends ArrayAdapter<FlickrPhoto> {
         }
         ivImage = (ImageView) itemView.findViewById(R.id.ivPhoto);
         ivImage.setImageResource(android.R.color.transparent); 
-        imageLoader.displayImage(photo.getUrl(), ivImage);
+        Picasso.with(getContext()).load(photo.getUrl()).into(ivImage);
         return itemView;
 	}
 }
