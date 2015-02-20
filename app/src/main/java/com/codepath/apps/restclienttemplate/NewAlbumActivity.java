@@ -10,7 +10,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
@@ -21,6 +24,7 @@ import com.loopj.android.http.SaxAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,8 +41,11 @@ public class NewAlbumActivity extends FragmentActivity {
 
     private UserInfoFormFragment userFragment;
     private ImageView ivPic;
-    private String mCurrentPhotoPath;
+    private ProgressBar progress;
+    private EditText etAlbumName;
 
+    // transients
+    private String mCurrentPhotoPath;
     private Uri currentPhotoUri;
 
     private View.OnLongClickListener cameraClickListener = new View.OnLongClickListener() {
@@ -71,6 +78,8 @@ public class NewAlbumActivity extends FragmentActivity {
         public void onSuccess(int statusCode, Header[] headers, String responseString) {
             if (statusCode == 200) {
                 String photoId = android.text.Html.fromHtml(responseString).toString();
+                // Create album
+                FlickrClientApp.getRestClient().createPhotoSet(etAlbumName.getText().toString(), photoId, photosetHandler);
             } else {
                 // TODO - Upload error
             }
@@ -83,7 +92,20 @@ public class NewAlbumActivity extends FragmentActivity {
 
         @Override
         public void onProgress(int bytesWritten, int totalSize) {
-            // TODO - Progress
+            progress.setProgress((bytesWritten/totalSize)*100);
+        }
+    };
+
+    private JsonHttpResponseHandler photosetHandler = new JsonHttpResponseHandler() {
+        @Override
+        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            Toast.makeText(NewAlbumActivity.this,"Album created", Toast.LENGTH_LONG).show();
+            // TODO - Were do we go if something is good
+        }
+
+        @Override
+        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+            // TODO - photoset error
         }
     };
 
@@ -107,6 +129,8 @@ public class NewAlbumActivity extends FragmentActivity {
 
     private void bindUIElements() {
         ivPic = (ImageView) findViewById(R.id.ivPic);
+        progress = (ProgressBar) findViewById(R.id.progress);
+        etAlbumName = (EditText) findViewById(R.id.etAlbumName);
     }
 
     private void setupListeners() {
@@ -155,6 +179,7 @@ public class NewAlbumActivity extends FragmentActivity {
         // Create album contributor
         AlbumContributor ac = userFragment.getAlbumContributor();
         // Upload photo
+        progress.setVisibility(View.VISIBLE);
         FlickrClientApp.getRestClient().uploadPhoto(currentPhotoUri, ac.getTags(), photoUploadHandler);
         // Create album
         // GOTO AlbumListView
