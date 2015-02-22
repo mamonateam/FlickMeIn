@@ -1,23 +1,19 @@
 package com.codepath.apps.restclienttemplate.models;
 
 import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.activeandroid.query.Select;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
+import java.util.ArrayList;
 
-@Table(name = "photos")
-public class FlickrPhoto extends Model { 
-	@Column(name = "uid")
+public class FlickrPhoto extends Model {
 	private String uid;
-	@Column(name = "name")
 	private String name;
-	@Column(name = "url")
 	private String url;
+    private String user;
+    private String color;
 	
 	public FlickrPhoto() {
 		super();
@@ -32,25 +28,66 @@ public class FlickrPhoto extends Model {
 			// http://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
 			this.url = "http://farm" + object.getInt("farm") + ".staticflickr.com/" + object.getInt("server") + 
 			  "/" + uid + "_" + object.getString("secret") + ".jpg";
+            // strip tags to get user and color
+            String tags = object.getString("tags");
+            this.user = "";
+            this.color = "";
+            if(tags.length() > 0) {
+                String[] strippedTags = tags.split(" ");
+                this.user = findTag(strippedTags, "fmiuser");
+                this.color = findTag(strippedTags, "fmicolor");
+            }
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static FlickrPhoto byPhotoUid(String uid) {
-	   return new Select().from(FlickrPhoto.class).where("uid = ?", uid).executeSingle();
-	}
-	
-	public static List<FlickrPhoto> recentItems() {
-      return new Select().from(FlickrPhoto.class).orderBy("id DESC").limit("300").execute();
-	}
-	
+
+    public static ArrayList<FlickrPhoto> fromJSONArray(JSONArray jsonArray) {
+        ArrayList<FlickrPhoto> photos = new ArrayList<>();
+
+        for(int i = 0; i < jsonArray.length(); i++) {
+            try {
+                FlickrPhoto photo = new FlickrPhoto(jsonArray.getJSONObject(i));
+                if(photo != null) {
+                    photos.add(photo);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+
+        return photos;
+    }
 
 	public String getUrl() {
 		return url;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
+    public String getUid() {
+        return uid;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    private String findTag(String[] strippedTags, String prefix) {
+        String result = "";
+        for (String tag : strippedTags) {
+            if (tag.startsWith(prefix)) {
+                result = tag.replace(prefix, "");
+                return result;
+            }
+        }
+        return result;
+    }
 }

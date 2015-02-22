@@ -6,9 +6,11 @@
 
     <ImageView
         android:id="@+id/ivPhoto"
+        android:src="@drawable/ic_launcher"
         android:contentDescription="@string/title_activity_photos"
    		android:layout_width="match_parent"
     	android:layout_height="match_parent"
-        android:scaleType="fitCenter" />
-
+        android:scaleType="fitCenter"
+        android:padding="1dp"
+        android:background="#00000000"/>
 </LinearLayout>
