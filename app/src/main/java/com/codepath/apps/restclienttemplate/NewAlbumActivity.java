@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,10 +18,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.SaxAsyncHttpResponseHandler;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -29,7 +27,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -81,18 +81,19 @@ public class NewAlbumActivity extends FragmentActivity {
                 // Create album
                 FlickrClientApp.getRestClient().createPhotoSet(etAlbumName.getText().toString(), photoId, photosetHandler);
             } else {
-                // TODO - Upload error
+                Log.e("PhotoUpload-Failure", responseString);
             }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            // TODO - Upload error
+            Log.e("PhotoUpload-Failure", responseString);
         }
 
         @Override
         public void onProgress(int bytesWritten, int totalSize) {
             progress.setProgress((bytesWritten/totalSize)*100);
+            Log.d("PhotoUpload-Progress", "written: " + String.valueOf(bytesWritten) + " total: " + String.valueOf(totalSize));
         }
     };
 
@@ -175,14 +176,25 @@ public class NewAlbumActivity extends FragmentActivity {
     }
 
     public void createNewAlbum(View view) {
+        if (currentPhotoUri == null) {
+            Toast.makeText(this, "You have to select a photo!", Toast.LENGTH_LONG).show();
+            return;
+        }
         // TODO - Check album contributor & currentPhotoUri exists
         // Create album contributor
         AlbumContributor ac = userFragment.getAlbumContributor();
         // Upload photo
-        progress.setVisibility(View.VISIBLE);
-        FlickrClientApp.getRestClient().uploadPhoto(currentPhotoUri, ac.getTags(), photoUploadHandler);
-        // Create album
-        // GOTO AlbumListView
+        try {
+            InputStream photoStream = getContentResolver().openInputStream(currentPhotoUri);
+            progress.setVisibility(View.VISIBLE);
+            FlickrClientApp.getRestClient().uploadPhoto(photoStream, ac.getTags(), photoUploadHandler);
+            // Create album
+            // GOTO AlbumListView
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            progress.setVisibility(View.GONE);
+        }
     }
 
     /* Image selection methods */

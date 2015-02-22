@@ -17,6 +17,7 @@ import org.scribe.builder.api.FlickrApi;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class FlickrClient extends OAuthBaseClient {
     public static final Class<? extends Api> REST_API_CLASS = FlickrApi.class;
@@ -54,19 +55,11 @@ public class FlickrClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
-    public void uploadPhoto(Uri photoUri, String[] tags, AsyncHttpResponseHandler handler) {
-        RequestParams params;
-        try {
-            setBaseUrl(UPLOAD_API_URL);
-            params = new RequestParams();
-            params.put("photo", new File(photoUri.getPath()));
-            params.put("tags", TextUtils.join(" ", tags));
-            client.post(getApiUrl("?"), params, handler);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            setBaseUrl(REST_API_URL);
-        }
+    public void uploadPhoto(InputStream photoStream, String[] tags, AsyncHttpResponseHandler handler) {
+        RequestParams params = new RequestParams();
+        params.put("photo", photoStream);
+        params.put("tags", TextUtils.join(" ", tags));
+        client.post(UPLOAD_API_URL, params, handler);
     }
 
 }
