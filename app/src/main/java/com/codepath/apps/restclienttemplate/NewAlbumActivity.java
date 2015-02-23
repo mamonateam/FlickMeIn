@@ -20,6 +20,7 @@ import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
 import com.codepath.apps.restclienttemplate.models.AuthorizedAlbum;
 import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
+import com.google.zxing.WriterException;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -101,6 +102,12 @@ public class NewAlbumActivity extends ActionBarActivity {
                 AuthorizedAlbum album = new AuthorizedAlbum(Long.parseLong(photosetId) , token.getToken(), token.getSecret());
                 // TODO - Do something with AuthorizedAlbum
                 // TODO - We go next view
+                try {
+                    ivPic.setImageBitmap(album.toBitmap());
+                } catch (WriterException e) {
+                    Log.e("QRGenerator", "Failure creating generator");
+                    e.printStackTrace();
+                }
             } catch (JSONException e) {
                 Toast.makeText(NewAlbumActivity.this, "Could not parse JSON photoset", Toast.LENGTH_LONG).show();
             }
