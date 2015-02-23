@@ -1,18 +1,27 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
-import android.net.Uri;
-import android.text.TextUtils;
+import android.os.AsyncTask;
 
+import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
 import com.codepath.oauth.OAuthBaseClient;
+import com.googlecode.flickrjandroid.Flickr;
+import com.googlecode.flickrjandroid.FlickrException;
+import com.googlecode.flickrjandroid.RequestContext;
+import com.googlecode.flickrjandroid.oauth.OAuth;
+import com.googlecode.flickrjandroid.oauth.OAuthToken;
+import com.googlecode.flickrjandroid.uploader.UploadMetaData;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.FlickrApi;
+import org.scribe.model.Token;
+import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 public class FlickrClient extends OAuthBaseClient {
     public static final Class<? extends Api> REST_API_CLASS = FlickrApi.class;
@@ -54,18 +63,64 @@ public class FlickrClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
-    public void uploadPhoto(Uri photoUri, String[] tags, AsyncHttpResponseHandler handler) {
-        RequestParams params;
-        try {
-            setBaseUrl(UPLOAD_API_URL);
-            params = new RequestParams();
-            params.put("photo", new File(photoUri.getPath()));
-            params.put("tags", TextUtils.join(" ", tags));
-            client.post(getApiUrl("?"), params, handler);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            setBaseUrl(REST_API_URL);
+    // Returns photoId
+    public void uploadPhoto(InputStream photoStream, String[] tags, UploadPhotoHandler handler) {
+        OAuth auth = new OAuth();
+        auth.setToken(new OAuthToken(client.getAccessToken().getToken(), client.getAccessToken().getSecret()));
+
+        UploadMetaData metaData = new UploadMetaData();
+        metaData.setTags(Arrays.asList(tags));
+        new UploadPhotoTask(auth, metaData, handler).execute(photoStream);
+    }
+
+    public Token getAccessToken() {
+        return client.getAccessToken();
+    }
+
+    public class UploadPhotoTask extends AsyncTask<InputStream, Void, String> {
+        private OAuth auth;
+        private UploadMetaData metadata;
+        private Flickr f;
+        private UploadPhotoHandler handler;
+
+        public UploadPhotoTask(OAuth auth, UploadMetaData metadata, UploadPhotoHandler handler) {
+            this.auth = auth;
+            this.metadata = metadata;
+            this.f = new Flickr(REST_CONSUMER_KEY, REST_CONSUMER_SECRET);
+            this.handler = handler;
+        }
+
+        @Override
+        protected String doInBackground(InputStream... stream) {
+            // Upload metadata
+            String photoId = "";
+            RequestContext.getRequestContext().setOAuth(auth);
+            try {
+                photoId = f.getUploader().upload("FlickMeIn", stream[0], metadata);
+                return photoId;
+            } catch(IOException e) {
+                e.printStackTrace();
+            } catch (FlickrException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            if (s != null) {
+                handler.onSuccess(s);
+            } else {
+                handler.onFailure();
+            }
+            super.onPostExecute(s);
         }
     }
 }

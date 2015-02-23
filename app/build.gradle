@@ -20,6 +20,10 @@ android {
 
 repositories {
     mavenCentral()
+
+    maven {
+        url "http://dl.bintray.com/journeyapps/maven"
+    }
 }
 
 dependencies {
@@ -29,5 +33,20 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.6'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'org.slf4j:slf4j-api:1.6.6'
+    compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
     compile 'com.etsy.android.grid:library:1.0.5'
+    compile 'com.google.zxing:core:2.2'
+
+    // Supports Android 4.0.3 and later (API level 15)
+    compile 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
+
+    // Supports Android 2.1 and later (API level 7), but not optimal for later Android versions.
+    // If you only plan on supporting Android 4.0.3 and up, you don't need to include this.
+    compile 'com.journeyapps:zxing-android-legacy:2.0.1@aar'
+
+    // Convenience library to launch the scanning and encoding Activities.
+    // It automatically picks the best scanning library from the above two, depending on the
+    // Android version and what is available.
+    compile 'com.journeyapps:zxing-android-integration:2.0.1@aar'
 }
