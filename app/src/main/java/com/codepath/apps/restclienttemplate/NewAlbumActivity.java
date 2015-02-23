@@ -7,6 +7,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,16 +18,19 @@ import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
+import com.codepath.apps.restclienttemplate.models.AuthorizedAlbum;
+import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.scribe.model.Token;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -70,26 +74,19 @@ public class NewAlbumActivity extends ActionBarActivity {
         }
     };
 
-    private TextHttpResponseHandler photoUploadHandler = new TextHttpResponseHandler() {
+    private UploadPhotoHandler uploadPhotoHandler= new UploadPhotoHandler() {
         @Override
-        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            if (statusCode == 200) {
-                String photoId = android.text.Html.fromHtml(responseString).toString();
-                // Create album
-                FlickrClientApp.getRestClient().createPhotoSet(etAlbumName.getText().toString(), photoId, photosetHandler);
-            } else {
-                // TODO - Upload error
-            }
+        public void onSuccess(String photoID) {
+            progress.setVisibility(View.GONE);
+            FlickrClientApp.getRestClient().createPhotoSet(etAlbumName.getText().toString(), photoID, photosetHandler);
+            Log.i("PhotoUploader-Success", "New photo id is " + photoID);
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            // TODO - Upload error
-        }
-
-        @Override
-        public void onProgress(int bytesWritten, int totalSize) {
-            progress.setProgress((bytesWritten/totalSize)*100);
+        public void onFailure() {
+            progress.setVisibility(View.GONE);
+            Toast.makeText(NewAlbumActivity.this, "Photo upload could not be done", Toast.LENGTH_LONG).show();
+            Log.e("PhotoUpload-Failure", "Could not upload photo");
         }
     };
 
@@ -97,12 +94,21 @@ public class NewAlbumActivity extends ActionBarActivity {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             Toast.makeText(NewAlbumActivity.this,"Album created", Toast.LENGTH_LONG).show();
-            // TODO - Were do we go if something is good
+            try {
+                String photosetId = response.getJSONObject("photoset").getString("id");
+
+                Token token = FlickrClientApp.getRestClient().getAccessToken();
+                AuthorizedAlbum album = new AuthorizedAlbum(Long.parseLong(photosetId) , token.getToken(), token.getSecret());
+                // TODO - Do something with AuthorizedAlbum
+                // TODO - We go next view
+            } catch (JSONException e) {
+                Toast.makeText(NewAlbumActivity.this, "Could not parse JSON photoset", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-            // TODO - photoset error
+            Toast.makeText(NewAlbumActivity.this, "Could not create photoset", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -172,14 +178,23 @@ public class NewAlbumActivity extends ActionBarActivity {
     }
 
     public void createNewAlbum(View view) {
+        if (currentPhotoUri == null) {
+            Toast.makeText(this, "You have to select a photo!", Toast.LENGTH_LONG).show();
+            return;
+        }
         // TODO - Check album contributor & currentPhotoUri exists
         // Create album contributor
         AlbumContributor ac = userFragment.getAlbumContributor();
         // Upload photo
-        progress.setVisibility(View.VISIBLE);
-        FlickrClientApp.getRestClient().uploadPhoto(currentPhotoUri, ac.getTags(), photoUploadHandler);
-        // Create album
-        // GOTO AlbumListView
+        try {
+            InputStream photoStream = getContentResolver().openInputStream(currentPhotoUri);
+            progress.setVisibility(View.VISIBLE);
+            FlickrClientApp.getRestClient().uploadPhoto(photoStream, ac.getTags(), uploadPhotoHandler);
+            // Create album
+            // GOTO AlbumListView
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /* Image selection methods */

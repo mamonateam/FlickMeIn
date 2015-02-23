@@ -7,13 +7,30 @@
     tools:context="com.codepath.apps.restclienttemplate.NewAlbumActivity">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
         android:id="@+id/ivPic"
         android:src="@drawable/ic_launcher"
         android:onClick="pickGalleryPhoto"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:maxHeight="150dp"
+        android:scaleType="fitCenter" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress"
+        android:layout_alignBottom="@+id/ivPic"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:max="100"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -52,20 +69,5 @@
             android:layout_centerInParent="true"
             android:id="@+id/flUserInfo"></FrameLayout>
     </RelativeLayout>
-
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progress"
-        android:layout_alignBottom="@+id/ivPic"
-        android:layout_alignRight="@+id/form"
-        android:layout_alignEnd="@+id/form"
-        android:layout_below="@+id/ivPic"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:max="100"
-        android:indeterminate="false"
-        android:visibility="gone" />
 
 </RelativeLayout>
