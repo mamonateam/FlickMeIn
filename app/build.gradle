@@ -25,4 +25,6 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.6'
     compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
     compile 'com.squareup.picasso:picasso:2.4.0'
+    compile 'org.slf4j:slf4j-api:1.6.6'
+    compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
 }

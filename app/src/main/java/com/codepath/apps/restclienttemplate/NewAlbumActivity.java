@@ -18,8 +18,8 @@ import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
+import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -73,27 +72,18 @@ public class NewAlbumActivity extends FragmentActivity {
         }
     };
 
-    private TextHttpResponseHandler photoUploadHandler = new TextHttpResponseHandler() {
+    private UploadPhotoHandler uploadPhotoHandler= new UploadPhotoHandler() {
         @Override
-        public void onSuccess(int statusCode, Header[] headers, String responseString) {
-            if (statusCode == 200) {
-                String photoId = android.text.Html.fromHtml(responseString).toString();
-                // Create album
-                FlickrClientApp.getRestClient().createPhotoSet(etAlbumName.getText().toString(), photoId, photosetHandler);
-            } else {
-                Log.e("PhotoUpload-Failure", responseString);
-            }
+        public void onSuccess(String photoID) {
+            progress.setVisibility(View.GONE);
+            Log.i("PhotoUploader-Success", "New photo id is " + photoID);
         }
 
         @Override
-        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-            Log.e("PhotoUpload-Failure", responseString);
-        }
-
-        @Override
-        public void onProgress(int bytesWritten, int totalSize) {
-            progress.setProgress((bytesWritten/totalSize)*100);
-            Log.d("PhotoUpload-Progress", "written: " + String.valueOf(bytesWritten) + " total: " + String.valueOf(totalSize));
+        public void onFailure() {
+            progress.setVisibility(View.GONE);
+            Toast.makeText(NewAlbumActivity.this, "Photo upload could not be done", Toast.LENGTH_LONG).show();
+            Log.e("PhotoUpload-Failure", "Could not upload photo");
         }
     };
 
@@ -187,13 +177,11 @@ public class NewAlbumActivity extends FragmentActivity {
         try {
             InputStream photoStream = getContentResolver().openInputStream(currentPhotoUri);
             progress.setVisibility(View.VISIBLE);
-            FlickrClientApp.getRestClient().uploadPhoto(photoStream, ac.getTags(), photoUploadHandler);
+            FlickrClientApp.getRestClient().uploadPhoto(photoStream, ac.getTags(), uploadPhotoHandler);
             // Create album
             // GOTO AlbumListView
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            progress.setVisibility(View.GONE);
         }
     }
 
