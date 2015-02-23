@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
+import com.codepath.apps.restclienttemplate.models.AuthorizedAlbum;
 import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -25,6 +26,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.scribe.model.Token;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,6 +78,7 @@ public class NewAlbumActivity extends FragmentActivity {
         @Override
         public void onSuccess(String photoID) {
             progress.setVisibility(View.GONE);
+            FlickrClientApp.getRestClient().createPhotoSet(etAlbumName.getText().toString(), photoID, photosetHandler);
             Log.i("PhotoUploader-Success", "New photo id is " + photoID);
         }
 
@@ -91,12 +94,21 @@ public class NewAlbumActivity extends FragmentActivity {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             Toast.makeText(NewAlbumActivity.this,"Album created", Toast.LENGTH_LONG).show();
-            // TODO - Were do we go if something is good
+            try {
+                String photosetId = response.getJSONObject("photoset").getString("id");
+
+                Token token = FlickrClientApp.getRestClient().getAccessToken();
+                AuthorizedAlbum album = new AuthorizedAlbum(Long.parseLong(photosetId) , token.getToken(), token.getSecret());
+                // TODO - Do something with AuthorizedAlbum
+                // TODO - We go next view
+            } catch (JSONException e) {
+                Toast.makeText(NewAlbumActivity.this, "Could not parse JSON photoset", Toast.LENGTH_LONG).show();
+            }
         }
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-            // TODO - photoset error
+            Toast.makeText(NewAlbumActivity.this, "Could not create photoset", Toast.LENGTH_LONG).show();
         }
     };
 

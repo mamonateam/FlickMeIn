@@ -21,6 +21,7 @@ import com.loopj.android.http.RequestParams;
 
 import org.scribe.builder.api.Api;
 import org.scribe.builder.api.FlickrApi;
+import org.scribe.model.Token;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -74,6 +75,10 @@ public class FlickrClient extends OAuthBaseClient {
         UploadMetaData metaData = new UploadMetaData();
         metaData.setTags(Arrays.asList(tags));
         new UploadPhotoTask(auth, metaData, handler).execute(photoStream);
+    }
+
+    public Token getAccessToken() {
+        return client.getAccessToken();
     }
 
     public class UploadPhotoTask extends AsyncTask<InputStream, Void, String> {
