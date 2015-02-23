@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
@@ -33,26 +34,37 @@ import java.util.Date;
 
 public class NewAlbumActivity extends ActionBarActivity {
 
+    // region Variables
     private static final int GALLERY_IMAGE_REQUEST = 101;
     private static final int CAMERA_IMAGE_REQUEST = 102;
 
     private UserInfoFormFragment userFragment;
     private ImageView ivPic;
+    private TextView tvCamera;
+    private TextView tvGallery;
     private ProgressBar progress;
     private EditText etAlbumName;
 
     // transients
     private String mCurrentPhotoPath;
     private Uri currentPhotoUri;
-
-    private View.OnLongClickListener cameraClickListener = new View.OnLongClickListener() {
+    // endregion
+    
+    // region Listeners
+    private View.OnClickListener cameraClickListener = new View.OnClickListener() {
         @Override
-        public boolean onLongClick(View v) {
+        public void onClick(View v) {
             dispatchTakePictureIntent();
-            return true;
         }
     };
 
+    private View.OnClickListener galleryClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            pickGalleryPhoto(v);
+        }
+    };
+    
     private JsonHttpResponseHandler usernameHandler = new JsonHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -105,7 +117,8 @@ public class NewAlbumActivity extends ActionBarActivity {
             // TODO - photoset error
         }
     };
-
+    // endregion
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,6 +129,8 @@ public class NewAlbumActivity extends ActionBarActivity {
         bindUIElements();
         setupListeners();
 
+        getSupportActionBar().hide();
+        
         // resolve flickr user name
         FlickrClientApp.getRestClient().getUsername(usernameHandler);
 
@@ -126,12 +141,15 @@ public class NewAlbumActivity extends ActionBarActivity {
 
     private void bindUIElements() {
         ivPic = (ImageView) findViewById(R.id.ivPic);
+        tvCamera = (TextView) findViewById(R.id.tvTakePicture);
+        tvGallery = (TextView) findViewById(R.id.tvFromGallery);
         progress = (ProgressBar) findViewById(R.id.progress);
         etAlbumName = (EditText) findViewById(R.id.etAlbumName);
     }
 
     private void setupListeners() {
-        ivPic.setOnLongClickListener(cameraClickListener);
+        tvCamera.setOnClickListener(cameraClickListener);
+        tvGallery.setOnClickListener(galleryClickListener);
     }
 
     @Override
@@ -166,6 +184,8 @@ public class NewAlbumActivity extends ActionBarActivity {
                 currentPhotoUri = Uri.parse(mCurrentPhotoPath);
                 ivPic.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getContentResolver(), currentPhotoUri));
             }
+            tvCamera.setVisibility(View.GONE);
+            tvGallery.setVisibility(View.GONE);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -182,6 +202,11 @@ public class NewAlbumActivity extends ActionBarActivity {
         // GOTO AlbumListView
     }
 
+    public void goToMain(View view) {
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+    }    
+    
     /* Image selection methods */
 
     private void dispatchTakePictureIntent() {

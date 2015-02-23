@@ -1,44 +1,65 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.codepath.apps.restclienttemplate.MainActivity">
+    tools:context="com.codepath.apps.restclienttemplate.MainActivity"
+    android:background="@drawable/backrepeat">
 
     <Button
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Create new album"
+        android:layout_height="60dp"
+        android:text="New album"
         android:id="@+id/btnCreateAlbum"
+        android:onClick="createNewAlbum"
+        android:layout_above="@+id/btnJoinAlbum"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/btnJoinAlbum"
+        android:layout_alignEnd="@+id/btnJoinAlbum"
+        android:background="@drawable/pink_bg"
+        android:textColor="#fff"
+        android:layout_marginBottom="16dp"
+        android:textAllCaps="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:text="Join to album"
+        android:id="@+id/btnJoinAlbum"
+        android:onClick="joinExistingAlbum"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/blue_bg"
+        android:textColor="#fff"
+        android:textAllCaps="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart="false"
+        android:src="@drawable/flickmein"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="createNewAlbum" />
+        android:layout_alignParentEnd="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Join existing album"
-        android:id="@+id/btnJoinAlbum"
-        android:layout_below="@+id/btnCreateAlbum"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="joinExistingAlbum" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="[Temp] go to Album View"
-        android:id="@+id/btnTmpAlbum"
-        android:onClick="goToAlbumView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="[Temp] go to Album View"-->
+    <!--android:id="@+id/btnTmpAlbum"-->
+    <!--android:onClick="goToAlbumView"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentEnd="true"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true" />-->
 </RelativeLayout>
