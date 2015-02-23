@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.codepath.apps.restclienttemplate.AlbumActivity">
+    <item
+        android:id="@+id/action_add_pics"
+        android:title="new"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_action_add_pics"
+        android:onClick="addPictures"/>
+    <item
+        android:id="@+id/action_qr"
+        android:title="@string/action_qr"
+        android:orderInCategory="101"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_qr"
+        android:onClick="ShowQR"/>
+</menu>

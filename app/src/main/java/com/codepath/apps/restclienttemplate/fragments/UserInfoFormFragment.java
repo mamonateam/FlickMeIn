@@ -12,9 +12,6 @@ import android.widget.EditText;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.models.AlbumContributor;
 
-/**
- * Created by jesusft on 2/19/15.
- */
 public class UserInfoFormFragment extends Fragment {
 
     private EditText etName;

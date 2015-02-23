@@ -1,7 +1,5 @@
 package com.codepath.apps.restclienttemplate.models;
 
-import android.graphics.Color;
-
 /**
  * Created by jesusft on 2/19/15.
  */
@@ -24,7 +22,7 @@ public class AlbumContributor {
     }
 
     public String[] getTags() {
-        return (new String[]{"@"+this.name, "#"+this.color});
+        return (new String[]{"fmiuser"+this.name, "fmicolor"+this.color});
     }
 
     @Override

@@ -1,6 +1,7 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +32,11 @@ public class PhotoArrayAdapter extends ArrayAdapter<FlickrPhoto> {
             itemView = (LinearLayout) convertView;
         }
         ivImage = (ImageView) itemView.findViewById(R.id.ivPhoto);
-        ivImage.setImageResource(android.R.color.transparent); 
+        ivImage.setImageResource(android.R.color.transparent);
+        // set border based on user's color
+        if(photo.getColor() != null && !photo.getColor().equals("")) {
+            ivImage.setBackgroundColor(Color.parseColor("#" + photo.getColor()));
+        }
         Picasso.with(getContext()).load(photo.getUrl()).into(ivImage);
         return itemView;
 	}

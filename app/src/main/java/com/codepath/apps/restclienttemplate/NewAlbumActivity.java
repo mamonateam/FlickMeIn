@@ -5,8 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class NewAlbumActivity extends FragmentActivity {
+public class NewAlbumActivity extends ActionBarActivity {
 
     private static final int GALLERY_IMAGE_REQUEST = 101;
     private static final int CAMERA_IMAGE_REQUEST = 102;

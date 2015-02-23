@@ -1,11 +1,7 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
 import com.codepath.oauth.OAuthBaseClient;
@@ -15,7 +11,6 @@ import com.googlecode.flickrjandroid.RequestContext;
 import com.googlecode.flickrjandroid.oauth.OAuth;
 import com.googlecode.flickrjandroid.oauth.OAuthToken;
 import com.googlecode.flickrjandroid.uploader.UploadMetaData;
-import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -24,12 +19,9 @@ import org.scribe.builder.api.FlickrApi;
 import org.scribe.model.Token;
 import org.xml.sax.SAXException;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class FlickrClient extends OAuthBaseClient {
     public static final Class<? extends Api> REST_API_CLASS = FlickrApi.class;
@@ -41,7 +33,6 @@ public class FlickrClient extends OAuthBaseClient {
     public static final String REST_API_URL = "https://api.flickr.com/services/rest";
     public static final String UPLOAD_API_URL = "https://up.flickr.com/services/upload";
 
-    
     public FlickrClient(Context context) {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
         setBaseUrl(REST_API_URL);
@@ -52,12 +43,17 @@ public class FlickrClient extends OAuthBaseClient {
         client.get(apiUrl, null, handler);
     }
 
-    public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("?&format=json&nojsoncallback=1&method=flickr.interestingness.getList");
-        Log.d("DEBUG", "Sending API call to " + apiUrl);
-        client.get(apiUrl, null, handler);
+    public void getAlbumPhotos(String albumId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("");
+        RequestParams params = new RequestParams();
+        params.put("method", "flickr.photosets.getPhotos");
+        params.put("format", "json");
+        params.put("nojsoncallback", "1");
+        params.put("photoset_id", albumId);
+        params.put("extras", "tags,url_o");
+        client.get(apiUrl, params, handler);
     }
-
+    
     public void createPhotoSet(String title, String photoId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("?method=flickr.photosets.create&format=json&nojsoncallback=1");
         RequestParams params = new RequestParams();
@@ -127,5 +123,4 @@ public class FlickrClient extends OAuthBaseClient {
             super.onPostExecute(s);
         }
     }
-
 }
