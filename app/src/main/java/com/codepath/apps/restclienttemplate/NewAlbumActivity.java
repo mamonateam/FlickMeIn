@@ -103,7 +103,7 @@ public class NewAlbumActivity extends ActionBarActivity {
                 // TODO - Do something with AuthorizedAlbum
                 // TODO - We go next view
                 try {
-                    ivPic.setImageBitmap(album.toBitmap());
+                    ivPic.setImageBitmap(album.toBitmap(800, 800));
                 } catch (WriterException e) {
                     Log.e("QRGenerator", "Failure creating generator");
                     e.printStackTrace();
