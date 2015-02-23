@@ -10,14 +10,10 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
-import java.security.Signature;
 import java.util.Hashtable;
 import java.util.IllegalFormatException;
 import java.util.StringTokenizer;
 
-/**
- * Created by jesusft on 2/22/15.
- */
 public class AuthorizedAlbum {
 
     private static final String QR_SIGNATURE = "FlickMeInOrNot";
