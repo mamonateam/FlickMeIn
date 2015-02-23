@@ -10,12 +10,18 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.security.Signature;
 import java.util.Hashtable;
+import java.util.IllegalFormatException;
+import java.util.StringTokenizer;
 
 /**
  * Created by jesusft on 2/22/15.
  */
 public class AuthorizedAlbum {
+
+    private static final String QR_SIGNATURE = "FlickMeInOrNot";
+    private static final String QR_END = "JAMON";
 
     private long photosetId;
     private String token;
@@ -40,29 +46,61 @@ public class AuthorizedAlbum {
     }
 
     private String encodeToString() {
-        return String.valueOf(photosetId) + ":" + token + ":" + secret;
+        return QR_SIGNATURE + ":" + String.valueOf(photosetId) + ":" + token + ":" + secret + ":" + QR_END;
     }
 
-    public Bitmap toBitmap() throws WriterException {
-        // TODO Generate QR from instance
+    public Bitmap toBitmap(int height, int width) throws WriterException {
         Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
-        BitMatrix byteMatrix = qrCodeWriter.encode(this.encodeToString(), BarcodeFormat.QR_CODE, 200, 200, hintMap);
-        Bitmap ImageBitmap = Bitmap.createBitmap(180, 40, Bitmap.Config.ARGB_8888);
+        BitMatrix byteMatrix = qrCodeWriter.encode(this.encodeToString(), BarcodeFormat.QR_CODE, width, height, hintMap);
 
-        for (int i = 0; i < 180; i++) {//width
-            for (int j = 0; j < 40; j++) {//height
-                ImageBitmap.setPixel(i, j, byteMatrix.get(i, j) ? Color.BLACK: Color.WHITE);
+
+        Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        for (int x = 0; x < width; x++){
+            for (int y = 0; y < height; y++){
+                bmp.setPixel(x, y, byteMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
             }
         }
-
-        return ImageBitmap;
+        return bmp;
     }
 
-    public static AuthorizedAlbum fromQRInfo(String qrInfo) {
-        // TODO Parse album instance from QR info
-        return null;
+    public static AuthorizedAlbum fromQRInfo(String qrInfo) throws IllegalFormatException {
+        if (!qrInfo.startsWith(QR_SIGNATURE)) {
+            throw new IllegalArgumentException("Could not find proper signature");
+        }
+        if (!qrInfo.endsWith(QR_END)) {
+            throw new IllegalArgumentException("QR Code is incomplete");
+        }
+
+        StringTokenizer st = new StringTokenizer(qrInfo, ":");
+
+        int tokenCount = 0;
+        long photosetId = -1;
+        String token = "";
+        String secret = "";
+        while(st.hasMoreTokens()) {
+            String t = st.nextToken();
+            switch (tokenCount) {
+                case 0:
+                    // Intro token
+                    break;
+                case 1:
+                    photosetId = Long.valueOf(t);
+                    break;
+                case 2:
+                    token = t;
+                    break;
+                case 3:
+                    secret = t;
+                    break;
+                case 4:
+                    // Outro token
+                    break;
+            }
+            tokenCount++;
+        }
+        return new AuthorizedAlbum(photosetId, token, secret);
     }
 
     @Override
