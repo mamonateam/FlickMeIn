@@ -20,6 +20,10 @@ android {
 
 repositories {
     mavenCentral()
+
+    maven {
+        url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
+    }
 }
 
 dependencies {
@@ -32,4 +36,6 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.6.6'
     compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
     compile 'com.etsy.android.grid:library:1.0.5'
+    compile 'com.google.zxing:core:2.2'
+    compile 'com.embarkmobile:zxing-android-minimal:1.2.1@aar'
 }
