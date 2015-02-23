@@ -41,7 +41,7 @@ public class FlickrClient extends OAuthBaseClient {
         params.put("format", "json");
         params.put("nojsoncallback", "1");
         params.put("photoset_id", albumId);
-        params.put("extras", "tags");
+        params.put("extras", "tags,url_o");
         client.get(apiUrl, params, handler);
     }
     

@@ -7,13 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import com.codepath.apps.restclienttemplate.FlickrClient;
 import com.codepath.apps.restclienttemplate.FlickrClientApp;
 import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.adapters.PhotoArrayAdapter;
 import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
+import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;
@@ -26,7 +26,7 @@ public class PicturesFragment extends Fragment {
     
     // region Variables
     private FlickrClient client;
-    private GridView gvPics;
+    private StaggeredGridView gvPics;
     private ArrayList<FlickrPhoto> pictures;
     private PhotoArrayAdapter adapter;
     // endregion
@@ -77,6 +77,6 @@ public class PicturesFragment extends Fragment {
     }
 
     private void bindUIElements(View v) {
-        gvPics = (GridView) v.findViewById(R.id.gvPics);
+        gvPics = (StaggeredGridView) v.findViewById(R.id.gvPics);
     }
 }
