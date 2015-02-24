@@ -112,6 +112,7 @@ public class NewAlbumActivity extends ActionBarActivity {
 
                 Token token = FlickrClientApp.getRestClient().getAccessToken();
                 AuthorizedAlbum album = new AuthorizedAlbum(Long.parseLong(photosetId) , token.getToken(), token.getSecret());
+                album.save();
                 // TODO - Do something with AuthorizedAlbum
                 // TODO - We go next view
                 try {
@@ -217,8 +218,6 @@ public class NewAlbumActivity extends ActionBarActivity {
             InputStream photoStream = getContentResolver().openInputStream(currentPhotoUri);
             progress.setVisibility(View.VISIBLE);
             FlickrClientApp.getRestClient().uploadPhoto(photoStream, ac.getTags(), uploadPhotoHandler);
-            // Create album
-            // GOTO AlbumListView
         } catch (IOException e) {
             e.printStackTrace();
         }
