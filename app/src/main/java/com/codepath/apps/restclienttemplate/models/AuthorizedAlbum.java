@@ -3,6 +3,10 @@ package com.codepath.apps.restclienttemplate.models;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Select;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
@@ -10,18 +14,30 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.io.Serializable;
 import java.util.Hashtable;
 import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.StringTokenizer;
 
-public class AuthorizedAlbum {
+@Table(name = "Albums")
+public class AuthorizedAlbum extends Model implements Serializable {
+
+    private static final long serialVersionUID = 3482394234L;
 
     private static final String QR_SIGNATURE = "FlickMeInOrNot";
     private static final String QR_END = "JAMON";
 
+    @Column(name = "uid", index = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long photosetId;
+
+    @Column(name = "token")
     private String token;
+
+    @Column(name = "secret")
     private String secret;
+
+    public AuthorizedAlbum() { super(); }
 
     public AuthorizedAlbum(long photosetId, String token, String secret) {
         this.photosetId = photosetId;
@@ -106,5 +122,12 @@ public class AuthorizedAlbum {
                 ", token='" + token + '\'' +
                 ", secret='" + secret + '\'' +
                 '}';
+    }
+
+    public static List<AuthorizedAlbum> getAll() {
+        return new Select()
+                .from(AuthorizedAlbum.class)
+                .orderBy("uid DESC")
+                .execute();
     }
 }
