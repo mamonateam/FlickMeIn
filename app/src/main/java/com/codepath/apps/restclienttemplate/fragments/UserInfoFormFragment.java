@@ -1,6 +1,5 @@
 package com.codepath.apps.restclienttemplate.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -48,6 +47,6 @@ public class UserInfoFormFragment extends Fragment {
     }
 
     public AlbumContributor getAlbumContributor() {
-        return new AlbumContributor(etName.getText().toString(), Color.parseColor(etColor.getText().toString()));
+        return new AlbumContributor(etName.getText().toString(), etColor.getText().toString());
     }
 }

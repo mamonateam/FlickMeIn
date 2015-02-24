@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#55999999">
+
+    <HorizontalScrollView
+        android:id="@+id/hsvNewPictures"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:visibility="gone"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:id="@+id/llNewPictures"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/hsvNewPictures"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/tvTakePicture"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="New Picture"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/camera"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp" />
+
+        <TextView
+            android:id="@+id/tvFromGallery"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="Gallery"
+            android:textColor="#fff"
+            android:drawableLeft="@drawable/gallery"
+            android:gravity="center_vertical"
+            android:textSize="20sp"
+            android:drawablePadding="10dp"
+            android:paddingLeft="10dp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -44,7 +44,7 @@ public class PicturesFragment extends Fragment {
 
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-            Log.d("ERROR_PHOTOS_FETCH", errorResponse.toString());
+            Log.d("ERROR_PHOTOS_FETCH", Integer.toString(statusCode));
         }
     };
     // endregion

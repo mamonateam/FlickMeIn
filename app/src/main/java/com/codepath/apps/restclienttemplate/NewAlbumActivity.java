@@ -39,10 +39,12 @@ import java.util.Date;
 
 public class NewAlbumActivity extends ActionBarActivity {
 
-    // region Variables
+    // region Constants
     private static final int GALLERY_IMAGE_REQUEST = 101;
     private static final int CAMERA_IMAGE_REQUEST = 102;
-
+    // endregion
+    
+    // region Variables
     private UserInfoFormFragment userFragment;
     private ImageView ivPic;
     private TextView tvCamera;

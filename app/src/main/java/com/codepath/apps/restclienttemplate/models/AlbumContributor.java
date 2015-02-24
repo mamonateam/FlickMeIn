@@ -1,14 +1,11 @@
 package com.codepath.apps.restclienttemplate.models;
 
-/**
- * Created by jesusft on 2/19/15.
- */
 public class AlbumContributor {
 
     private String name;
-    private int color;
+    private String color;
 
-    public AlbumContributor(String name, int color) {
+    public AlbumContributor(String name, String color) {
         this.name = name;
         this.color = color;
     }
@@ -17,7 +14,7 @@ public class AlbumContributor {
         return name;
     }
 
-    public int getColor() {
+    public String getColor() {
         return color;
     }
 
