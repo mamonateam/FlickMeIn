@@ -63,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null && scanResult.getContents() != null) {
             AuthorizedAlbum album = AuthorizedAlbum.fromQRInfo(scanResult.getContents());
+            album.save();
             Log.d("QRParse", album.toString());
         } else {
             Toast.makeText(this, "Could not capture any QR", Toast.LENGTH_LONG).show();
