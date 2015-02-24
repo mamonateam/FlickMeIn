@@ -3,7 +3,10 @@ package com.codepath.apps.flickmein.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ClipData;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -89,7 +92,7 @@ public class NewPicturesFragment extends Fragment {
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             imagesArray.remove(0);
             llPicsContainer.removeViewAt(0);
-            if(imagesArray.size() > 0) {
+            if (imagesArray.size() > 0) {
                 uploadPicture(imagesArray.get(0));
             } else {
                 restore();
@@ -164,6 +167,8 @@ public class NewPicturesFragment extends Fragment {
 
     private void populateGallery(ArrayList<Uri> gallery) {
         int size = gallery.size();
+        int height = getResources().getDimensionPixelSize(R.dimen.horizontal_gallery_height);
+        
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
@@ -177,15 +182,17 @@ public class NewPicturesFragment extends Fragment {
             image.setTag(i);
             image.setLayoutParams(layoutParams);
             image.setAdjustViewBounds(true);
-            image.setPadding(0,0,5,0);    // TBD
+            image.setPadding(0, 0, 5, 0);    // TBD
             try {
-                image.setImageBitmap(MediaStore.Images.Media.getBitmap(this.getActivity().getContentResolver(), gallery.get(i)));
-                // image.setOnClickListener(galleryImageListener); // In case we need it
+                Bitmap bitmap = decodeSampledBitmapFromUri(getActivity().getContentResolver(), gallery.get(i), height);
+                image.setImageBitmap(bitmap);
+                llPicsContainer.addView(image);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            // image.setOnClickListener(galleryImageListener); // In case we need it
 
-            llPicsContainer.addView(image);
+            
         }
     }
 
@@ -254,5 +261,42 @@ public class NewPicturesFragment extends Fragment {
         // tvGallery.setVisibility(View.VISIBLE);
         hsvPicsScroll.setVisibility(View.GONE);
         llPicsContainer.removeAllViews();
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        int inSampleSize = 1;
+
+        if (height > reqHeight) {
+
+            final int halfHeight = height / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromUri(ContentResolver cr, Uri uri, int reqHeight) throws IOException {
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+
+        options.inJustDecodeBounds = true;
+        InputStream stream = cr.openInputStream(uri);
+        BitmapFactory.decodeStream(stream, null, options);
+        stream.close();
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqHeight);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        stream = cr.openInputStream(uri);
+        return BitmapFactory.decodeStream(stream, null, options);
     }
 }

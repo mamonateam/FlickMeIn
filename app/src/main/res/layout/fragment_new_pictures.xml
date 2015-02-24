@@ -7,7 +7,7 @@
     <HorizontalScrollView
         android:id="@+id/hsvNewPictures"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="@dimen/horizontal_gallery_height"
         android:visibility="gone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
