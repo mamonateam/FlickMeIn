@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.flickmein;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -8,8 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.codepath.apps.restclienttemplate.fragments.NewPicturesFragment;
-import com.codepath.apps.restclienttemplate.fragments.PicturesFragment;
+import com.codepath.apps.flickmein.fragments.NewPicturesFragment;
+import com.codepath.apps.flickmein.fragments.PicturesFragment;
 
 
 public class AlbumActivity extends ActionBarActivity {

@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.adapters;
+package com.codepath.apps.flickmein.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
+import com.codepath.apps.flickmein.R;
+import com.codepath.apps.flickmein.models.FlickrPhoto;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

@@ -1,17 +1,14 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.flickmein;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
-import com.codepath.apps.restclienttemplate.utils.BlurTransform;
+import com.codepath.apps.flickmein.models.FlickrPhoto;
+import com.codepath.apps.flickmein.utils.BlurTransform;
 import com.codepath.oauth.OAuthLoginActivity;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 

@@ -1,13 +1,8 @@
-package com.codepath.apps.restclienttemplate;
-
-import android.util.Log;
+package com.codepath.apps.flickmein;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-/**
- * Created by jesusft on 2/19/15.
- */
 public class PublicFlickrClient {
 
     private final static String API_BASE = "https://api.flickr.com/services/rest/";

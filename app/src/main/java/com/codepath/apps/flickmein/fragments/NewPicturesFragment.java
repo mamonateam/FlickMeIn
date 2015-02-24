@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.fragments;
+package com.codepath.apps.flickmein.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -22,9 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codepath.apps.restclienttemplate.FlickrClientApp;
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
+import com.codepath.apps.flickmein.FlickrClientApp;
+import com.codepath.apps.flickmein.R;
+import com.codepath.apps.flickmein.utils.UploadPhotoHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.apache.http.Header;

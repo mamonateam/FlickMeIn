@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.utils;
+package com.codepath.apps.flickmein.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,9 +9,6 @@ import android.renderscript.ScriptIntrinsicBlur;
 
 import com.squareup.picasso.Transformation;
 
-/**
- * Created by jesusft on 2/19/15.
- */
 public class BlurTransform implements Transformation {
 
     RenderScript rs;

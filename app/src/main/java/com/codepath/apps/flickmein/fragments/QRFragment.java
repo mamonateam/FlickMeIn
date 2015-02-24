@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.fragments;
+package com.codepath.apps.flickmein.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,13 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.models.AuthorizedAlbum;
+import com.codepath.apps.flickmein.R;
+import com.codepath.apps.flickmein.models.AuthorizedAlbum;
 import com.google.zxing.WriterException;
 
-/**
- * Created by jesusft on 2/23/15.
- */
 public class QRFragment extends Fragment {
 
     private ImageView ivQR;

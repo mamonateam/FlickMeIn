@@ -1,9 +1,9 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.flickmein;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
+import com.codepath.apps.flickmein.utils.UploadPhotoHandler;
 import com.codepath.oauth.OAuthBaseClient;
 import com.googlecode.flickrjandroid.Flickr;
 import com.googlecode.flickrjandroid.FlickrException;

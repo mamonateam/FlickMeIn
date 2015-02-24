@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.models;
+package com.codepath.apps.flickmein.models;
 
 public class AlbumContributor {
 

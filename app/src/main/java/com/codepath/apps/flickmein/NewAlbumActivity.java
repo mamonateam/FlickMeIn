@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.flickmein;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -17,10 +17,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.codepath.apps.restclienttemplate.fragments.UserInfoFormFragment;
-import com.codepath.apps.restclienttemplate.models.AlbumContributor;
-import com.codepath.apps.restclienttemplate.models.AuthorizedAlbum;
-import com.codepath.apps.restclienttemplate.utils.UploadPhotoHandler;
+import com.codepath.apps.flickmein.fragments.UserInfoFormFragment;
+import com.codepath.apps.flickmein.models.AlbumContributor;
+import com.codepath.apps.flickmein.models.AuthorizedAlbum;
+import com.codepath.apps.flickmein.utils.UploadPhotoHandler;
 import com.google.zxing.WriterException;
 import com.loopj.android.http.JsonHttpResponseHandler;
 

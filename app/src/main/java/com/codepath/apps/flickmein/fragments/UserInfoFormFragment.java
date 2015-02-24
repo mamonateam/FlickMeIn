@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.fragments;
+package com.codepath.apps.flickmein.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.models.AlbumContributor;
+import com.codepath.apps.flickmein.R;
+import com.codepath.apps.flickmein.models.AlbumContributor;
 
 public class UserInfoFormFragment extends Fragment {
 

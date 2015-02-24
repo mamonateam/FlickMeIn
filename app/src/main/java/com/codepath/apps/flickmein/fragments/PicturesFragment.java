@@ -1,4 +1,4 @@
-package com.codepath.apps.restclienttemplate.fragments;
+package com.codepath.apps.flickmein.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,11 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.codepath.apps.restclienttemplate.FlickrClient;
-import com.codepath.apps.restclienttemplate.FlickrClientApp;
-import com.codepath.apps.restclienttemplate.R;
-import com.codepath.apps.restclienttemplate.adapters.PhotoArrayAdapter;
-import com.codepath.apps.restclienttemplate.models.FlickrPhoto;
+import com.codepath.apps.flickmein.FlickrClient;
+import com.codepath.apps.flickmein.FlickrClientApp;
+import com.codepath.apps.flickmein.R;
+import com.codepath.apps.flickmein.adapters.PhotoArrayAdapter;
+import com.codepath.apps.flickmein.models.FlickrPhoto;
 import com.etsy.android.grid.StaggeredGridView;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
