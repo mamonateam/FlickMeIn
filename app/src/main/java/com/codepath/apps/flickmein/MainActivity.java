@@ -52,7 +52,6 @@ public class MainActivity extends ActionBarActivity {
         Intent i = new Intent(this, AlbumActivity.class);
         AuthorizedAlbum album = AuthorizedAlbum.getAll().get(0);
         i.putExtra("album", album);
-        // ToDo: we need to pass the oauth token to this call to make it available for not signed in users...
         startActivity(i);
     }
 
@@ -61,8 +60,11 @@ public class MainActivity extends ActionBarActivity {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null && scanResult.getContents() != null) {
             AuthorizedAlbum album = AuthorizedAlbum.fromQRInfo(scanResult.getContents());
-            album.save();
             Log.d("QRParse", album.toString());
+            // Go to JoinAlbumActivity
+            Intent i = new Intent(this, JoinAlbumActivity.class);
+            i.putExtra("album", album);
+            startActivity(i);
         } else {
             Toast.makeText(this, "Could not capture any QR", Toast.LENGTH_LONG).show();
         }

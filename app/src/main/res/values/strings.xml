@@ -10,5 +10,6 @@
     <string name="title_activity_main">Flick me in</string>
     <string name="title_activity_album">Album</string>
     <string name="action_qr">QR</string>
+    <string name="title_activity_join_album">JoinAlbumActivity</string>
 
 </resources>

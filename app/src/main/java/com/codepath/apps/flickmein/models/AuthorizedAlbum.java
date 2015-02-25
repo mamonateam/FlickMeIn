@@ -37,6 +37,9 @@ public class AuthorizedAlbum extends Model implements Serializable {
     @Column(name = "secret")
     private String secret;
 
+    @Column(name = "contributor")
+    private AlbumContributor contributor;
+
     public AuthorizedAlbum() { super(); }
 
     public AuthorizedAlbum(long photosetId, String token, String secret) {
@@ -55,6 +58,14 @@ public class AuthorizedAlbum extends Model implements Serializable {
 
     public String getSecret() {
         return secret;
+    }
+
+    public AlbumContributor getContributor() {
+        return contributor;
+    }
+
+    public void setContributor(AlbumContributor contributor) {
+        this.contributor = contributor;
     }
 
     private String encodeToString() {
