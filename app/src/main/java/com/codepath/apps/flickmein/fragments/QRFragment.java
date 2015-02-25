@@ -29,6 +29,7 @@ public class QRFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        album = (AuthorizedAlbum) getArguments().getSerializable("album");
     }
 
     @Override
