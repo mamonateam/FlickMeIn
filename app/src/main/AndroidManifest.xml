@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codepath.apps.flickmein"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="17"
@@ -21,11 +21,11 @@
         android:maxSdkVersion="18" />
 
     <application
-        android:name="com.codepath.apps.flickmein.FlickrClientApp"
+        android:name=".FlickrClientApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="AA_DB_NAME"
             android:value="RestClient.db" />
@@ -34,17 +34,17 @@
             android:value="1" />
 
         <activity
-            android:name="com.codepath.apps.flickmein.MainActivity"
-            android:label="@string/title_activity_main">
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.codepath.apps.flickmein.LoginActivity"
-            android:label="@string/app_name">
+            android:name=".LoginActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -56,15 +56,17 @@
                     android:scheme="oauth" />
             </intent-filter>
         </activity>
-        
         <activity
-            android:name="com.codepath.apps.flickmein.NewAlbumActivity"
+            android:name=".NewAlbumActivity"
             android:label="@string/title_activity_new_album"
-            android:parentActivityName="com.codepath.apps.flickmein.MainActivity"/>
-        
+            android:parentActivityName=".MainActivity" />
         <activity
-            android:name="com.codepath.apps.flickmein.AlbumActivity"
-            android:label="@string/title_activity_album"/>
+            android:name=".AlbumActivity"
+            android:label="@string/title_activity_album" />
+        <activity
+            android:name=".JoinAlbumActivity"
+            android:label="@string/title_activity_join_album" >
+        </activity>
     </application>
 
 </manifest>

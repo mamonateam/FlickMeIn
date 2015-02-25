@@ -1,0 +1,66 @@
+package com.codepath.apps.flickmein;
+
+import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import com.codepath.apps.flickmein.fragments.UserInfoFormFragment;
+import com.codepath.apps.flickmein.models.AlbumContributor;
+import com.codepath.apps.flickmein.models.AuthorizedAlbum;
+
+
+public class JoinAlbumActivity extends ActionBarActivity {
+
+    private AuthorizedAlbum album;
+
+    private UserInfoFormFragment userFragment;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
+        setContentView(R.layout.activity_join_album);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        AuthorizedAlbum album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
+        userFragment = new UserInfoFormFragment();
+        ft.replace(R.id.flContributor, userFragment);
+        ft.commit();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_join_album, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void joinAlbum(View view) {
+        AlbumContributor contributor = userFragment.getAlbumContributor();
+        contributor.save();
+        album.setContributor(contributor);
+        album.save();
+        Intent i = new Intent(this, AlbumActivity.class);
+        i.putExtra("album", album);
+        startActivity(i);
+    }
+}
