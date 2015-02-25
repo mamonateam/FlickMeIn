@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ViewFlipper;
 
 import com.codepath.apps.flickmein.fragments.AlbumFragment;
@@ -27,6 +28,8 @@ public class AlbumActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             AuthorizedAlbum album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
+            // ToDo Add name to album
+            // getSupportActionBar().setTitle(album.getName());
             albumFragment = AlbumFragment.newInstance(album);
             getSupportFragmentManager()
                     .beginTransaction()

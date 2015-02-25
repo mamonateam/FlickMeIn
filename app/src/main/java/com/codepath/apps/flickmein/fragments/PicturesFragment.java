@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.codepath.apps.flickmein.FlickrClient;
 import com.codepath.apps.flickmein.PublicFlickrClient;
@@ -29,6 +30,7 @@ public class PicturesFragment extends Fragment {
     private StaggeredGridView gvPics;
     private ArrayList<FlickrPhoto> pictures;
     private PhotoArrayAdapter adapter;
+    private FrameLayout flLoading;
     // endregion
     
     // region Listeners
@@ -46,6 +48,12 @@ public class PicturesFragment extends Fragment {
         @Override
         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
             Log.d("ERROR_PHOTOS_FETCH", Integer.toString(statusCode));
+        }
+
+        @Override
+        public void onFinish() {
+            super.onFinish();
+            flLoading.setVisibility(View.GONE);
         }
     };
     // endregion
@@ -66,6 +74,7 @@ public class PicturesFragment extends Fragment {
         pictures = new ArrayList<>();
         adapter = new PhotoArrayAdapter(this.getActivity(), pictures);
         gvPics.setAdapter(adapter);
+        flLoading.setVisibility(View.VISIBLE);
         return v;
     }
 
@@ -80,6 +89,7 @@ public class PicturesFragment extends Fragment {
 
     private void bindUIElements(View v) {
         gvPics = (StaggeredGridView) v.findViewById(R.id.gvPics);
+        flLoading = (FrameLayout) v.findViewById(R.id.flLoading);
     }
     
     public void addPicture(FlickrPhoto pic) {

@@ -13,7 +13,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 // Important ToDos
-// ToDo: indeterminate progress in album view
 // ToDo: List of albums...
 // ToDo: Redirect to QR view when album is created {jesus}
 // ToDo: Detail view from Google Image Search {jesus}
