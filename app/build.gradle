@@ -37,7 +37,8 @@ dependencies {
     compile 'com.googlecode.flickrj-android:flickrj-android:2.1.0'
     compile 'com.etsy.android.grid:library:1.0.5'
     compile 'com.google.zxing:core:2.2'
-
+    compile 'com.larswerkman:HoloColorPicker:1.4'
+    
     // Supports Android 4.0.3 and later (API level 15)
     compile 'com.journeyapps:zxing-android-embedded:2.0.1@aar'
 

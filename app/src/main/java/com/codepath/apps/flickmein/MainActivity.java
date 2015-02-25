@@ -13,11 +13,9 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 // Important ToDos
-// ToDo: Use color picker
 // ToDo: indeterminate progress in album view
 // ToDo: List of albums...
 // ToDo: Redirect to QR view when album is created {jesus}
-// ToDo: Show QR Flipcard {jesus}
 // ToDo: Detail view from Google Image Search {jesus}
 // ToDo: Link albumcontributor to authorizedalbum {jesus}
 // ToDo: moar styling

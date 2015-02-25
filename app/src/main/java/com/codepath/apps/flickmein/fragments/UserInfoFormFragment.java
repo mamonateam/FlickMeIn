@@ -1,5 +1,6 @@
 package com.codepath.apps.flickmein.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,14 +8,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.models.AlbumContributor;
 
+import java.util.Random;
+
 public class UserInfoFormFragment extends Fragment {
 
+    // region Constants
+    private static final String[] DEFAULT_COLORS = {"#00abbd", "#055499", "#9bca3c", "#ff5a00", "#cc0000", "#ff921f", "#e91365", "#98dde4"};
+    // endregion
+
+    // region Variables
     private EditText etName;
-    private EditText etColor;
+    private ImageView ivColorSelector;
+    private int color = Color.parseColor(DEFAULT_COLORS[new Random().nextInt(DEFAULT_COLORS.length)]);
+    // endregion
+
+    // region Listeners
+    private View.OnClickListener onSelectColorListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+            ColorPickerFragment colorDialog = ColorPickerFragment.newInstance(color);
+            colorDialog.setOnColorPickedListener(onColorPicked);
+            colorDialog.show(fm, "fragment_color");
+        }
+    };
+    private ColorPickerFragment.OnColorPicked onColorPicked = new ColorPickerFragment.OnColorPicked() {
+        @Override
+        public void onColorPicked(int c) {
+            color = c;
+            ivColorSelector.setBackgroundColor(color);
+        }
+    };
+    // endregion
 
     public static UserInfoFormFragment newInstance(String suggestedName) {
         UserInfoFormFragment ui = new UserInfoFormFragment();
@@ -33,13 +63,20 @@ public class UserInfoFormFragment extends Fragment {
         if (getArguments() != null) {
             etName.setText(getArguments().getString("name"));
         }
+        setUpListeners();
+
+        ivColorSelector.setBackgroundColor(color);
 
         return v;
     }
 
     private void bindAllElements(View v) {
         etName = (EditText) v.findViewById(R.id.etName);
-        etColor = (EditText) v.findViewById(R.id.etColor);
+        ivColorSelector = (ImageView) v.findViewById(R.id.ivColorSelector);
+    }
+
+    private void setUpListeners() {
+        ivColorSelector.setOnClickListener(onSelectColorListener);
     }
 
     public void setName(String name) {
@@ -47,6 +84,7 @@ public class UserInfoFormFragment extends Fragment {
     }
 
     public AlbumContributor getAlbumContributor() {
-        return new AlbumContributor(etName.getText().toString(), etColor.getText().toString());
+        String hexColor = String.format("#%06X", (0xFFFFFF & color));
+        return new AlbumContributor(etName.getText().toString(), hexColor);
     }
 }
