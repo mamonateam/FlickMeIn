@@ -1,9 +1,23 @@
 package com.codepath.apps.flickmein.models;
 
-public class AlbumContributor {
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
+import java.io.Serializable;
+
+@Table(name = "contributors")
+public class AlbumContributor extends Model implements Serializable {
+
+    private static final long serialVersionUID = 8982342234L;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "color")
     private String color;
+
+    public AlbumContributor() { super(); }
 
     public AlbumContributor(String name, String color) {
         this.name = name;
