@@ -17,7 +17,6 @@ import com.google.zxing.integration.android.IntentResult;
 // ToDo: indeterminate progress in album view
 // ToDo: List of albums...
 // ToDo: Redirect to QR view when album is created {jesus}
-// ToDo: Scan QR and select own name and color for uploading pics {jesus}
 // ToDo: Show QR Flipcard {jesus}
 // ToDo: Detail view from Google Image Search {jesus}
 // ToDo: Link albumcontributor to authorizedalbum {jesus}
