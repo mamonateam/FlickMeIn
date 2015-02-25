@@ -14,15 +14,20 @@ import com.google.zxing.integration.android.IntentResult;
 
 // Important ToDos
 // ToDo: show loader while pic is uploaded
+// ToDo: Link between uploader and grid view
 // ToDo: Use color picker
-// ToDo: Redirect to QR view when album is created
-// ToDo: Scan QR and select own name and color for uploading pics
+// ToDo: indeterminate progress in album view
 // ToDo: List of albums...
-// ToDo: Add Loader while album is created (do not allow to change anything or click send again)
-// ToDo: Settings like "filter by uploader"
-// ToDo: Make Push notifications using Parse
-// ToDo: Link albums user belongs to to Google account (for additional persistence)
+// ToDo: Redirect to QR view when album is created {jesus}
+// ToDo: Scan QR and select own name and color for uploading pics {jesus}
+// ToDo: Show QR Flipcard {jesus}
+// ToDo: Detail view from Google Image Search {jesus}
+// ToDo: Link albumcontributor to authorizedalbum {jesus}
 // ToDo: moar styling
+// ToDo: Add Loader while album is created (do not allow to change anything or click send again)
+// ToDo: (Stretch) Make Push notifications using Parse
+// ToDo: (Stretch) Settings like "filter by uploader"
+// ToDo: (Stretch) Link albums user belongs to to Google account (for additional persistence)
 
 public class MainActivity extends ActionBarActivity {
 
@@ -45,7 +50,8 @@ public class MainActivity extends ActionBarActivity {
     // ToDo: Temporary access to an album
     public void goToAlbumView(View view) {
         Intent i = new Intent(this, AlbumActivity.class);
-        i.putExtra("id", "72157651012673115");
+        AuthorizedAlbum album = AuthorizedAlbum.getAll().get(0);
+        i.putExtra("album", album);
         // ToDo: we need to pass the oauth token to this call to make it available for not signed in users...
         startActivity(i);
     }

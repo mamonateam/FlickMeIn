@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.codepath.apps.flickmein.FlickrClientApp;
 import com.codepath.apps.flickmein.R;
+import com.codepath.apps.flickmein.models.AuthorizedAlbum;
 import com.codepath.apps.flickmein.utils.UploadPhotoHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -55,7 +56,7 @@ public class NewPicturesFragment extends Fragment {
     private HorizontalScrollView hsvPicsScroll;
     private LinearLayout llPicsContainer;
     private ArrayList<Uri> imagesArray;
-    private String albumId;
+    private AuthorizedAlbum album;
     // endregion
 
     // region Listeners
@@ -77,7 +78,7 @@ public class NewPicturesFragment extends Fragment {
         @Override
         public void onSuccess(String photoID) {
             Log.i("PhotoUploader-Success", "New photo id is " + photoID);
-            FlickrClientApp.getRestClient().addToAlbum(photoID, albumId, addToAlbumHandler);
+            FlickrClientApp.getRestClient().addToAlbum(photoID, album, addToAlbumHandler);
         }
 
         @Override
@@ -118,7 +119,7 @@ public class NewPicturesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        albumId = getActivity().getIntent().getStringExtra("id");
+        album = (AuthorizedAlbum) getActivity().getIntent().getSerializableExtra("album");
     }
 
     private void bindUIElements(View v) {
@@ -201,8 +202,7 @@ public class NewPicturesFragment extends Fragment {
         try {
             photoStream = this.getActivity().getContentResolver().openInputStream(imageUri);
             // ToDo: Get real tags
-//            FlickrClientApp.getRestClient().uploadPhoto(photoStream, ac.getTags(), uploadPhotoHandler);
-            FlickrClientApp.getRestClient().uploadPhoto(photoStream, new String[]{"fmiusersheniff", "fmicolorff00ff"}, uploadPhotoHandler);
+            FlickrClientApp.getRestClient().uploadPhoto(album, photoStream, new String[]{"fmiusersheniff", "fmicolorff00ff"}, uploadPhotoHandler);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -298,5 +298,14 @@ public class NewPicturesFragment extends Fragment {
         options.inJustDecodeBounds = false;
         stream = cr.openInputStream(uri);
         return BitmapFactory.decodeStream(stream, null, options);
+    }
+
+    public static NewPicturesFragment newInstance(AuthorizedAlbum album) {
+        NewPicturesFragment fragment = new NewPicturesFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("album", album);
+        fragment.setArguments(args);
+
+        return fragment;
     }
 }

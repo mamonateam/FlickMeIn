@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.codepath.apps.flickmein.FlickrClient;
 import com.codepath.apps.flickmein.FlickrClientApp;
+import com.codepath.apps.flickmein.PublicFlickrClient;
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.adapters.PhotoArrayAdapter;
 import com.codepath.apps.flickmein.models.FlickrPhoto;
@@ -36,6 +37,7 @@ public class PicturesFragment extends Fragment {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
             try {
+                Log.d("PicturesFragment", response.toString());
                 adapter.addAll(FlickrPhoto.fromJSONArray(response.getJSONObject("photoset").getJSONArray("photo")));
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -71,9 +73,10 @@ public class PicturesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        client = FlickrClientApp.getRestClient();
         // fetch album pics
-        client.getAlbumPhotos(getArguments().getString("id"), photosHandler);
+        String id = getArguments().getString("id");
+        Log.d("PicturesFragment", "Initialized fragment with id: " + id);
+        PublicFlickrClient.getAlbumPhotos(id, photosHandler);
     }
 
     private void bindUIElements(View v) {

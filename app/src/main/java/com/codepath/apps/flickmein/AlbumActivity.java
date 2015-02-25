@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import com.codepath.apps.flickmein.fragments.NewPicturesFragment;
 import com.codepath.apps.flickmein.fragments.PicturesFragment;
+import com.codepath.apps.flickmein.models.AuthorizedAlbum;
 
 
 public class AlbumActivity extends ActionBarActivity {
@@ -28,14 +29,14 @@ public class AlbumActivity extends ActionBarActivity {
         
         // Initialize the pictures fragment
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        String albumId = getIntent().getStringExtra("id");
-        PicturesFragment picturesFragment = PicturesFragment.newInstance(albumId);
+        AuthorizedAlbum album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
+        PicturesFragment picturesFragment = PicturesFragment.newInstance(String.valueOf(album.getPhotosetId()));
         ft.replace(R.id.flPictures, picturesFragment);
         ft.commit();
         
         // Initialize new pictures fragment
         ft = getSupportFragmentManager().beginTransaction();
-        newPicturesFragment = new NewPicturesFragment();
+        newPicturesFragment = NewPicturesFragment.newInstance(album);
         ft.replace(R.id.flNewPictures, newPicturesFragment);
         ft.commit();
     }

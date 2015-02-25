@@ -3,6 +3,7 @@ package com.codepath.apps.flickmein;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.codepath.apps.flickmein.models.AuthorizedAlbum;
 import com.codepath.apps.flickmein.utils.UploadPhotoHandler;
 import com.codepath.oauth.OAuthBaseClient;
 import com.googlecode.flickrjandroid.Flickr;
@@ -43,17 +44,6 @@ public class FlickrClient extends OAuthBaseClient {
         client.get(apiUrl, null, handler);
     }
 
-    public void getAlbumPhotos(String albumId, AsyncHttpResponseHandler handler) {
-        String apiUrl = getApiUrl("");
-        RequestParams params = new RequestParams();
-        params.put("method", "flickr.photosets.getPhotos");
-        params.put("format", "json");
-        params.put("nojsoncallback", "1");
-        params.put("photoset_id", albumId);
-        params.put("extras", "tags,url_o");
-        client.get(apiUrl, params, handler);
-    }
-
     public void createPhotoSet(String title, String photoId, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("?method=flickr.photosets.create&format=json&nojsoncallback=1");
         RequestParams params = new RequestParams();
@@ -63,13 +53,14 @@ public class FlickrClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
-    public void addToAlbum(String photoId, String albumId, AsyncHttpResponseHandler handler) {
+    public void addToAlbum(String photoId, AuthorizedAlbum album, AsyncHttpResponseHandler handler) {
         String apiUrl = getApiUrl("");
+        client.setAccessToken(new Token(album.getToken(),album.getSecret()));
         RequestParams params = new RequestParams();
         params.put("method", "flickr.photosets.addPhoto");
         params.put("format", "json");
         params.put("nojsoncallback", "1");
-        params.put("photoset_id", albumId);
+        params.put("photoset_id", String.valueOf(album.getPhotosetId()));
         params.put("photo_id", photoId);
         client.get(apiUrl, params, handler);
     }
@@ -78,6 +69,15 @@ public class FlickrClient extends OAuthBaseClient {
     public void uploadPhoto(InputStream photoStream, String[] tags, UploadPhotoHandler handler) {
         OAuth auth = new OAuth();
         auth.setToken(new OAuthToken(client.getAccessToken().getToken(), client.getAccessToken().getSecret()));
+
+        UploadMetaData metaData = new UploadMetaData();
+        metaData.setTags(Arrays.asList(tags));
+        new UploadPhotoTask(auth, metaData, handler).execute(photoStream);
+    }
+
+    public void uploadPhoto(AuthorizedAlbum album, InputStream photoStream, String[] tags, UploadPhotoHandler handler) {
+        OAuth auth = new OAuth();
+        auth.setToken(new OAuthToken(album.getToken(), album.getSecret()));
 
         UploadMetaData metaData = new UploadMetaData();
         metaData.setTags(Arrays.asList(tags));
