@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import com.codepath.apps.flickmein.fragments.NewPicturesFragment;
 import com.codepath.apps.flickmein.fragments.PicturesFragment;
 import com.codepath.apps.flickmein.models.AuthorizedAlbum;
+import com.codepath.apps.flickmein.models.FlickrPhoto;
 
 
 public class AlbumActivity extends ActionBarActivity {
@@ -18,6 +19,16 @@ public class AlbumActivity extends ActionBarActivity {
     // region Variables
     private FrameLayout flNewPictures;
     private NewPicturesFragment newPicturesFragment;
+    private PicturesFragment picturesFragment;
+    // endregion
+    
+    // region Listeners
+    private NewPicturesFragment.OnPictureUploadedListener onPictureUploadedListener = new NewPicturesFragment.OnPictureUploadedListener() {
+        @Override
+        public void onPictureUploaded(FlickrPhoto pic) {
+            picturesFragment.addPicture(pic);
+        }
+    };
     // endregion
     
     @Override
@@ -30,13 +41,14 @@ public class AlbumActivity extends ActionBarActivity {
         // Initialize the pictures fragment
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         AuthorizedAlbum album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
-        PicturesFragment picturesFragment = PicturesFragment.newInstance(String.valueOf(album.getPhotosetId()));
+        picturesFragment = PicturesFragment.newInstance(String.valueOf(album.getPhotosetId()));
         ft.replace(R.id.flPictures, picturesFragment);
         ft.commit();
         
         // Initialize new pictures fragment
         ft = getSupportFragmentManager().beginTransaction();
         newPicturesFragment = NewPicturesFragment.newInstance(album);
+        newPicturesFragment.setOnPictureUploadedListener(onPictureUploadedListener);
         ft.replace(R.id.flNewPictures, newPicturesFragment);
         ft.commit();
     }
@@ -61,5 +73,5 @@ public class AlbumActivity extends ActionBarActivity {
     }
 
     public void ShowQR(MenuItem item) {
-    }
+    }   
 }

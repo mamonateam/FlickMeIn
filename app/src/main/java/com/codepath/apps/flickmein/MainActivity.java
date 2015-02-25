@@ -13,8 +13,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 // Important ToDos
-// ToDo: show loader while pic is uploaded
-// ToDo: Link between uploader and grid view
 // ToDo: Use color picker
 // ToDo: indeterminate progress in album view
 // ToDo: List of albums...
@@ -26,6 +24,7 @@ import com.google.zxing.integration.android.IntentResult;
 // ToDo: moar styling
 // ToDo: Add Loader while album is created (do not allow to change anything or click send again)
 // ToDo: (Stretch) Make Push notifications using Parse
+// ToDo: (Stretch) Make horizontal scroll view more efficient using a list view :)
 // ToDo: (Stretch) Settings like "filter by uploader"
 // ToDo: (Stretch) Link albums user belongs to to Google account (for additional persistence)
 

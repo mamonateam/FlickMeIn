@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,12 +23,15 @@ import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.codepath.apps.flickmein.FlickrClientApp;
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.models.AuthorizedAlbum;
+import com.codepath.apps.flickmein.models.FlickrPhoto;
 import com.codepath.apps.flickmein.utils.UploadPhotoHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -57,6 +61,7 @@ public class NewPicturesFragment extends Fragment {
     private LinearLayout llPicsContainer;
     private ArrayList<Uri> imagesArray;
     private AuthorizedAlbum album;
+    private OnPictureUploadedListener pictureUploadedListener;
     // endregion
 
     // region Listeners
@@ -85,16 +90,30 @@ public class NewPicturesFragment extends Fragment {
         public void onFailure() {
             Toast.makeText(getActivity(), "Photo upload could not be done", Toast.LENGTH_LONG).show();
             Log.e("PhotoUpload-Failure", "Could not upload photo");
+            restore();
         }
     };
 
     private JsonHttpResponseHandler addToAlbumHandler = new JsonHttpResponseHandler() {
         @Override
         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+            // Call activity's listener
+            if(pictureUploadedListener != null) {
+                // ToDo: Get real tags
+                FlickrPhoto newPhoto = new FlickrPhoto();
+                newPhoto.setColor("ff00ff");
+                newPhoto.setUser("sheniff");
+                newPhoto.setUri(imagesArray.get(0));
+                pictureUploadedListener.onPictureUploaded(newPhoto);
+            }
+
             imagesArray.remove(0);
             llPicsContainer.removeViewAt(0);
+            
             if (imagesArray.size() > 0) {
                 uploadPicture(imagesArray.get(0));
+                // Show progress bar in first child now...
+                llPicsContainer.getChildAt(0).findViewById(R.id.progress_circular).setVisibility(View.VISIBLE);
             } else {
                 restore();
             }
@@ -107,6 +126,10 @@ public class NewPicturesFragment extends Fragment {
         }
     };
     // endregion
+
+    public interface OnPictureUploadedListener {
+        public void onPictureUploaded(FlickrPhoto pic);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -134,6 +157,19 @@ public class NewPicturesFragment extends Fragment {
         tvGallery.setOnClickListener(galleryClickListener);
     }
 
+    public static NewPicturesFragment newInstance(AuthorizedAlbum album) {
+        NewPicturesFragment fragment = new NewPicturesFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("album", album);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    public void setOnPictureUploadedListener(OnPictureUploadedListener listener) {
+        this.pictureUploadedListener = listener;
+    }
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
@@ -154,8 +190,6 @@ public class NewPicturesFragment extends Fragment {
                 imagesArray.add(Uri.parse(mCurrentPhotoPath));
             }
 
-            // tvCamera.setVisibility(View.GONE);
-            // tvGallery.setVisibility(View.GONE);
             hsvPicsScroll.setVisibility(View.VISIBLE);
 
             llPicsContainer.removeAllViews();
@@ -166,6 +200,7 @@ public class NewPicturesFragment extends Fragment {
         }
     }
 
+    // ToDo: Refactor all this crap to make it more efficient... (use an horizontal list view)
     private void populateGallery(ArrayList<Uri> gallery) {
         int size = gallery.size();
         int height = getResources().getDimensionPixelSize(R.dimen.horizontal_gallery_height);
@@ -178,22 +213,41 @@ public class NewPicturesFragment extends Fragment {
         layoutParams.gravity = Gravity.LEFT;
 
         for (int i = 0; i < size; i++) {
-            ImageView image = new ImageView(this.getActivity());
+            RelativeLayout rlWrapper = new RelativeLayout(this.getActivity());
 
-            image.setTag(i);
+            rlWrapper.setTag(i);
+            rlWrapper.setLayoutParams(layoutParams);
+            rlWrapper.setPadding(0, 0, 5, 0);
+
+            ImageView image = new ImageView(this.getActivity());
             image.setLayoutParams(layoutParams);
             image.setAdjustViewBounds(true);
-            image.setPadding(0, 0, 5, 0);    // TBD
+            
+            rlWrapper.addView(image);
+                        
             try {
                 Bitmap bitmap = decodeSampledBitmapFromUri(getActivity().getContentResolver(), gallery.get(i), height);
                 image.setImageBitmap(bitmap);
-                llPicsContainer.addView(image);
+
+                // loader image
+                ProgressBar pb = new ProgressBar(this.getActivity());
+                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                        bitmap.getWidth(),
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                );
+
+                pb.setLayoutParams(lp);
+                pb.setPadding(50, 50, 50, 50);
+                pb.setId(R.id.progress_circular);
+                if(i > 0) {
+                    pb.setVisibility(View.GONE);
+                }
+                pb.setBackgroundColor(Color.parseColor("#44666666"));
+                rlWrapper.addView(pb);
+                llPicsContainer.addView(rlWrapper);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            // image.setOnClickListener(galleryImageListener); // In case we need it
-
-            
         }
     }
 
@@ -207,7 +261,7 @@ public class NewPicturesFragment extends Fragment {
             e.printStackTrace();
         }
     }
-    
+
     /* Image selection methods */
 
     private void dispatchTakePictureIntent() {
@@ -298,14 +352,5 @@ public class NewPicturesFragment extends Fragment {
         options.inJustDecodeBounds = false;
         stream = cr.openInputStream(uri);
         return BitmapFactory.decodeStream(stream, null, options);
-    }
-
-    public static NewPicturesFragment newInstance(AuthorizedAlbum album) {
-        NewPicturesFragment fragment = new NewPicturesFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("album", album);
-        fragment.setArguments(args);
-
-        return fragment;
     }
 }

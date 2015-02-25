@@ -1,5 +1,7 @@
 package com.codepath.apps.flickmein.models;
 
+import android.net.Uri;
+
 import com.activeandroid.Model;
 
 import org.json.JSONArray;
@@ -14,12 +16,21 @@ public class FlickrPhoto extends Model {
 	private String url;
     private String user;
     private String color;
+    private Uri uri;
 	
 	public FlickrPhoto() {
 		super();
 	}
-	
-	public FlickrPhoto(JSONObject object){
+
+    public FlickrPhoto(String uid, String name, String url, String user, String color) {
+        this.uid = uid;
+        this.name = name;
+        this.url = url;
+        this.user = user;
+        this.color = color;
+    }
+
+    public FlickrPhoto(JSONObject object){
 		super();
 
 		try {
@@ -78,6 +89,26 @@ public class FlickrPhoto extends Model {
 
     public String getColor() {
         return color;
+    }
+
+    public Uri getUri() {
+        return uri;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setUri(Uri uri) {
+        this.uri = uri;
     }
 
     private String findTag(String[] strippedTags, String prefix) {

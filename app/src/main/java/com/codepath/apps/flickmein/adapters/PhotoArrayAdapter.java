@@ -37,7 +37,11 @@ public class PhotoArrayAdapter extends ArrayAdapter<FlickrPhoto> {
         if(photo.getColor() != null && !photo.getColor().equals("")) {
             ivImage.setBackgroundColor(Color.parseColor("#" + photo.getColor()));
         }
-        Picasso.with(getContext()).load(photo.getUrl()).into(ivImage);
+        if(photo.getUrl() != null) {
+            Picasso.with(getContext()).load(photo.getUrl()).resize(500,0).into(ivImage);
+        } else if(photo.getUri() != null) {
+            Picasso.with(getContext()).load(photo.getUri()).resize(500,0).into(ivImage);
+        }
         return itemView;
 	}
 }
