@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.codepath.apps.flickmein.FlickrClient;
-import com.codepath.apps.flickmein.FlickrClientApp;
 import com.codepath.apps.flickmein.PublicFlickrClient;
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.adapters.PhotoArrayAdapter;
