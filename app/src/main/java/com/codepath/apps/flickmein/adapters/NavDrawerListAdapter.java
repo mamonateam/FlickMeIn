@@ -1,6 +1,7 @@
 package com.codepath.apps.flickmein.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,17 +28,17 @@ public class NavDrawerListAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return albums.size();
+        return albums.size() + 2;
     }
 
     @Override
     public Object getItem(int position) {
-        return albums.get(position);
+        return albums.get(position - 2);
     }
 
     @Override
     public long getItemId(int position) {
-        return position;
+        return position - 2;
     }
 
     @Override
@@ -48,7 +49,20 @@ public class NavDrawerListAdapter extends BaseAdapter {
         }
 
         TextView txtTitle = (TextView) convertView.findViewById(R.id.txtDrawerItemAlbumTitle);
-        txtTitle.setText(albums.get(position).getTitle());
+
+        if(position == 0) {
+            // Special case: create new album
+            txtTitle.setText("Create New Album");
+            txtTitle.setTextColor(convertView.getResources().getColor(R.color.flickr_pink));
+        } else if (position == 1) {
+            // Special case: join to album
+            txtTitle.setText("Join To Album");
+            txtTitle.setTextColor(convertView.getResources().getColor(R.color.flickr_blue));
+        } else {
+            txtTitle.setText(albums.get(position - 2).getTitle());
+            txtTitle.setBackgroundColor(Color.TRANSPARENT);
+            txtTitle.setTextColor(Color.BLACK);
+        }
         
         return convertView;
     }

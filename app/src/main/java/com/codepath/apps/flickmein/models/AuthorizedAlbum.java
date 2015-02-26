@@ -72,7 +72,11 @@ public class AuthorizedAlbum extends Model implements Serializable {
     }
 
     public String getTitle() {
-        return title;
+        if(title == null || title == "") {
+            return "<No Title>";
+        } else {
+            return title;
+        }
     }
 
     public void setTitle(String title) {
@@ -151,10 +155,5 @@ public class AuthorizedAlbum extends Model implements Serializable {
                 .from(AuthorizedAlbum.class)
                 .orderBy("uid DESC")
                 .execute();
-    }
-    
-    // Borrame!!
-    public String getTitle() {
-        return "Tmp title";
     }
 }

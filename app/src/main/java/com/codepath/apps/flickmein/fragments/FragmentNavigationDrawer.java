@@ -6,6 +6,7 @@ package com.codepath.apps.flickmein.fragments;
 */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -17,9 +18,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.codepath.apps.flickmein.LoginActivity;
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.adapters.NavDrawerListAdapter;
 import com.codepath.apps.flickmein.models.AuthorizedAlbum;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
 
@@ -70,19 +73,30 @@ public class FragmentNavigationDrawer extends DrawerLayout {
         lvDrawer.setAdapter(drawerAdapter);
     }
 
+    public void clearNavItems() {
+        albumNavItems.clear();
+    }
+    
     /**
      * Swaps fragments in the main content view
      */
     public void selectDrawerItem(int position) {
-        AuthorizedAlbum currentAlbum = albumNavItems.get(position);
+        if(position == 0) {
+            Intent i = new Intent(this.getActivity(), LoginActivity.class);
+            this.getActivity().startActivity(i);
+        } else if (position == 1) {
+            new IntentIntegrator(this.getActivity()).initiateScan();
+        } else {
+            AuthorizedAlbum currentAlbum = albumNavItems.get(position - 2);
 
-        albumFragment.changeAlbum(currentAlbum);
-        qrFragment.changeAlbum(currentAlbum);
+            albumFragment.changeAlbum(currentAlbum);
+            qrFragment.changeAlbum(currentAlbum);
 
-        // Highlight the selected item, update the title, and close the drawer
-        lvDrawer.setItemChecked(position, true);
-        setTitle(currentAlbum.getTitle());        
-        closeDrawer(lvDrawer);
+            // Highlight the selected item, update the title, and close the drawer
+            lvDrawer.setItemChecked(position - 2, true);
+            setTitle(currentAlbum.getTitle());
+            closeDrawer(lvDrawer);
+        }
     }
 
     public ActionBarDrawerToggle getDrawerToggle() {

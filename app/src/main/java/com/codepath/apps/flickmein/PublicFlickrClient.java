@@ -31,4 +31,26 @@ public class PublicFlickrClient {
         params.put("api_key", API_KEY);
         c.get(API_BASE, params, handler);
     }
+
+    public static void getAlbumInfo(String albumId, AsyncHttpResponseHandler handler) {
+        AsyncHttpClient c = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("method", "flickr.photosets.getInfo");
+        params.put("format", "json");
+        params.put("nojsoncallback", "1");
+        params.put("photoset_id", albumId);
+        params.put("api_key", API_KEY);
+        c.get(API_BASE, params, handler);
+    }
+    
+    public static void getPhotoSizes(String albumId, AsyncHttpResponseHandler handler) {
+        AsyncHttpClient c = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        params.put("method", "flickr.photos.getSizes");
+        params.put("format", "json");
+        params.put("nojsoncallback", "1");
+        params.put("photo_id", albumId);
+        params.put("api_key", API_KEY);
+        c.get(API_BASE, params, handler);
+    }
 }

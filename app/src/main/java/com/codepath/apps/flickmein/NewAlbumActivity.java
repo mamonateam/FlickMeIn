@@ -146,8 +146,6 @@ public class NewAlbumActivity extends ActionBarActivity {
         bindUIElements();
         setupListeners();
 
-        getSupportActionBar().hide();
-        
         // resolve flickr user name
         FlickrClientApp.getRestClient().getUsername(usernameHandler);
 

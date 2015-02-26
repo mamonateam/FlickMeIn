@@ -1,18 +1,23 @@
 package com.codepath.apps.flickmein;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.codepath.apps.flickmein.fragments.AlbumFragment;
 import com.codepath.apps.flickmein.fragments.FragmentNavigationDrawer;
 import com.codepath.apps.flickmein.fragments.QRFragment;
 import com.codepath.apps.flickmein.models.AuthorizedAlbum;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.tekle.oss.android.animation.AnimationFactory;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ public class AlbumActivity extends ActionBarActivity {
     private AlbumFragment albumFragment;
     private ViewFlipper viewFlipper;
     private FragmentNavigationDrawer dlDrawer;
+    private QRFragment qrFragment;
     // endregion
     
     @Override
@@ -38,30 +44,31 @@ public class AlbumActivity extends ActionBarActivity {
         dlDrawer = (FragmentNavigationDrawer) findViewById(R.id.drawer_layout);
         viewFlipper = (ViewFlipper) findViewById(R.id.viewflipper);
 
-        if (savedInstanceState == null) {
-            AuthorizedAlbum album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
+        AuthorizedAlbum album = (AuthorizedAlbum) getIntent().getSerializableExtra("album");
 
+        if (savedInstanceState == null) {
             albumFragment = AlbumFragment.newInstance(album);
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.albumContainer, albumFragment)
                     .commit();
 
-            QRFragment qrFragment = QRFragment.newInstance(album);
+            qrFragment = QRFragment.newInstance(album);
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.qrContainer, qrFragment)
                     .commit();
+        }
 
-            // setup drawer view
-            dlDrawer.setupDrawerConfiguration((ListView) findViewById(R.id.lvDrawer), toolbar, R.layout.drawer_nav_item, albumFragment, qrFragment);
-            dlDrawer.setTitle(album.getTitle());
+        // setup drawer view
+        dlDrawer.setupDrawerConfiguration((ListView) findViewById(R.id.lvDrawer), toolbar, R.layout.drawer_nav_item, albumFragment, qrFragment);
+        dlDrawer.setTitle(album.getTitle());
 
-            // Add nav items
-            ArrayList<AuthorizedAlbum> albums = (ArrayList<AuthorizedAlbum>) AuthorizedAlbum.getAll();
-            for (int i = 0; i < albums.size(); i++) {
-                dlDrawer.addNavItem(albums.get(i));
-            }
+        // Add nav items
+        ArrayList<AuthorizedAlbum> albums = (ArrayList<AuthorizedAlbum>) AuthorizedAlbum.getAll();
+        dlDrawer.clearNavItems();
+        for (int i = 0; i < albums.size(); i++) {
+            dlDrawer.addNavItem(albums.get(i));
         }
     }
 
@@ -109,8 +116,23 @@ public class AlbumActivity extends ActionBarActivity {
     public void addPictures(MenuItem item) {
         albumFragment.addPicturesState();
     }
-
+    
     public void ShowQR(MenuItem item) {
         AnimationFactory.flipTransition(viewFlipper, AnimationFactory.FlipDirection.LEFT_RIGHT);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null && scanResult.getContents() != null) {
+            AuthorizedAlbum album = AuthorizedAlbum.fromQRInfo(scanResult.getContents());
+            Log.d("QRParse", album.toString());
+            // Go to JoinAlbumActivity
+            Intent i = new Intent(this, JoinAlbumActivity.class);
+            i.putExtra("album", album);
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "Could not capture any QR", Toast.LENGTH_LONG).show();
+        }
     }
 }
