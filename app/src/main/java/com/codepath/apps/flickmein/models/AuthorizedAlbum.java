@@ -31,6 +31,9 @@ public class AuthorizedAlbum extends Model implements Serializable {
     @Column(name = "uid", index = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long photosetId;
 
+    @Column(name = "title")
+    private String title;
+
     @Column(name = "token")
     private String token;
 
@@ -66,6 +69,14 @@ public class AuthorizedAlbum extends Model implements Serializable {
 
     public void setContributor(AlbumContributor contributor) {
         this.contributor = contributor;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     private String encodeToString() {

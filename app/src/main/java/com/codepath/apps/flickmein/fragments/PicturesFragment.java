@@ -1,5 +1,6 @@
 package com.codepath.apps.flickmein.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -7,8 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.codepath.apps.flickmein.FlickrClient;
+import com.codepath.apps.flickmein.PhotoDetailActivity;
 import com.codepath.apps.flickmein.PublicFlickrClient;
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.adapters.PhotoArrayAdapter;
@@ -63,10 +66,23 @@ public class PicturesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pictures, container, false);
         bindUIElements(v);
+        setupListeners(v);
         pictures = new ArrayList<>();
         adapter = new PhotoArrayAdapter(this.getActivity(), pictures);
         gvPics.setAdapter(adapter);
         return v;
+    }
+
+    private void setupListeners(View v) {
+        gvPics.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getActivity(), PhotoDetailActivity.class);
+                FlickrPhoto result = pictures.get(position);
+                i.putExtra("result", result);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
@@ -85,4 +101,5 @@ public class PicturesFragment extends Fragment {
     public void addPicture(FlickrPhoto pic) {
         adapter.add(pic);
     }
+
 }
