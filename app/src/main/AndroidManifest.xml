@@ -67,6 +67,10 @@
             android:name=".JoinAlbumActivity"
             android:label="@string/title_activity_join_album" >
         </activity>
+        <activity
+            android:name=".PhotoDetailActivity"
+            android:label="@string/title_activity_photo_detail" >
+        </activity>
     </application>
 
 </manifest>

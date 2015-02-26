@@ -13,10 +13,6 @@ import com.google.zxing.integration.android.IntentResult;
 
 
 // Important ToDos
-// ToDo: List of albums...
-// ToDo: Redirect to QR view when album is created {jesus}
-// ToDo: Detail view from Google Image Search {jesus}
-// ToDo: Link albumcontributor to authorizedalbum {jesus}
 // ToDo: moar styling
 // ToDo: Add Loader while album is created (do not allow to change anything or click send again)
 // ToDo: (Stretch) Make Push notifications using Parse

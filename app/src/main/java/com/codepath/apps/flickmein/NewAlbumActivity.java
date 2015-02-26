@@ -114,6 +114,7 @@ public class NewAlbumActivity extends ActionBarActivity {
 
                 Token token = FlickrClientApp.getRestClient().getAccessToken();
                 AuthorizedAlbum album = new AuthorizedAlbum(Long.parseLong(photosetId) , token.getToken(), token.getSecret());
+                album.setTitle(etAlbumName.getText().toString());
                 album.save();
                 // TODO - Do something with AuthorizedAlbum
                 // TODO - We go next view
