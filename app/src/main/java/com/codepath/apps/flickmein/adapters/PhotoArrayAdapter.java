@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.codepath.apps.flickmein.R;
 import com.codepath.apps.flickmein.models.FlickrPhoto;
+import com.codepath.apps.flickmein.views.CornerOverlayView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,25 +24,32 @@ public class PhotoArrayAdapter extends ArrayAdapter<FlickrPhoto> {
 	@Override
     public View getView(int position, View convertView, ViewGroup parent) {
 		FlickrPhoto photo = this.getItem(position);
-		LinearLayout itemView;
+		RelativeLayout itemView;
 		ImageView ivImage;
+        CornerOverlayView cvCorner;
+        
         if (convertView == null) {
     		LayoutInflater inflator = LayoutInflater.from(getContext());
-    		itemView = (LinearLayout) inflator.inflate(R.layout.photo_item, parent, false);
+    		itemView = (RelativeLayout) inflator.inflate(R.layout.photo_item, parent, false);
         } else {
-            itemView = (LinearLayout) convertView;
+            itemView = (RelativeLayout) convertView;
         }
+        
         ivImage = (ImageView) itemView.findViewById(R.id.ivPhoto);
+        cvCorner = (CornerOverlayView) itemView.findViewById(R.id.cvCorner);
         ivImage.setImageResource(android.R.color.transparent);
+        
         // set border based on user's color
         if(photo.getColor() != null && !photo.getColor().equals("")) {
-            ivImage.setBackgroundColor(Color.parseColor("#" + photo.getColor()));
+            cvCorner.setCornerColor(Color.parseColor("#" + photo.getColor()));
         }
+        
         if(photo.getUrl() != null) {
             Picasso.with(getContext()).load(photo.getUrl()).resize(200,0).into(ivImage);
         } else if(photo.getUri() != null) {
             Picasso.with(getContext()).load(photo.getUri()).resize(200,0).into(ivImage);
         }
+        
         return itemView;
 	}
 }

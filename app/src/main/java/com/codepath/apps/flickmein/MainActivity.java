@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 
 // Important ToDos
-// ToDo: ReStyle pictures to change border for a simple triangle in the corner (bottom right)
 // ToDo: Redirect to QR view when album is created {jesus}
 // ToDo: moar styling
 // ToDo: Add Loader while album is created (do not allow to change anything or click send again)

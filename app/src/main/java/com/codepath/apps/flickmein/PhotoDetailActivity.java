@@ -5,11 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -29,30 +30,30 @@ import java.io.IOException;
 
 public class PhotoDetailActivity extends ActionBarActivity {
 
+    // region Variables
     private FlickrPhoto result;
     private ImageView ivImageResult;
     private ShareActionProvider miShareAction;
-
     private FrameLayout flImageContainer;
     private ImageView ivLoaderImage;
     private RelativeLayout rlLoader;
     private Animation animRotate;
-
+    private Toolbar toolbar;
+    // endregion
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_detail);
-        ivImageResult = (ImageView) findViewById(R.id.ivImageResult);
-
-        flImageContainer = (FrameLayout) findViewById(R.id.flImageContainer);
-        ivLoaderImage = (ImageView) findViewById(R.id.ivLoaderImage);
-        rlLoader = (RelativeLayout) findViewById(R.id.rlLoader);
+        bindUIElements();
+        
+        setSupportActionBar(toolbar);
 
         result = (FlickrPhoto) getIntent().getSerializableExtra("result");
 
         animRotate = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.rotate);
         ivLoaderImage.setAnimation(animRotate);
-
+        
         Picasso.with(this).load(result.getUrl()).into(ivImageResult, new Callback() {
             @Override
             public void onSuccess() {
@@ -68,6 +69,14 @@ public class PhotoDetailActivity extends ActionBarActivity {
 
             }
         });
+    }
+
+    private void bindUIElements() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        ivImageResult = (ImageView) findViewById(R.id.ivImageResult);
+        flImageContainer = (FrameLayout) findViewById(R.id.flImageContainer);
+        ivLoaderImage = (ImageView) findViewById(R.id.ivLoaderImage);
+        rlLoader = (RelativeLayout) findViewById(R.id.rlLoader);
     }
 
     private void setupShareIntent() {

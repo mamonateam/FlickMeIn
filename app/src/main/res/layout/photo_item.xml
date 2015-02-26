@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="wrap_content" >
 
     <ImageView
         android:id="@+id/ivPhoto"
@@ -11,6 +10,15 @@
    		android:layout_width="match_parent"
     	android:layout_height="wrap_content"
         android:adjustViewBounds="true"
-        android:padding="1dp"
-        android:background="#00000000"/>
-</LinearLayout>
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp" />
+    
+    <com.codepath.apps.flickmein.views.CornerOverlayView
+        android:id="@+id/cvCorner"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+</RelativeLayout>

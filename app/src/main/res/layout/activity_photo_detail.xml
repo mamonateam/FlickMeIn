@@ -47,6 +47,13 @@
             android:layout_centerHorizontal="true"
             android:padding="8dp"
             android:textColor="#d9d9d9"
+            android:layout_marginTop="10dp"
             android:gravity="center"/>
     </RelativeLayout>
+
+    <!-- The ActionBar -->
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </FrameLayout>
