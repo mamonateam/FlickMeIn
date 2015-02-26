@@ -152,4 +152,9 @@ public class AuthorizedAlbum extends Model implements Serializable {
                 .orderBy("uid DESC")
                 .execute();
     }
+    
+    // Borrame!!
+    public String getTitle() {
+        return "Tmp title";
+    }
 }

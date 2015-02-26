@@ -49,4 +49,13 @@ public class QRFragment extends Fragment {
     private void bindUIElements(View v) {
         ivQR = (ImageView) v.findViewById(R.id.ivQR);
     }
+
+    public void changeAlbum(AuthorizedAlbum currentAlbum) {
+        album = currentAlbum;
+        try {
+            ivQR.setImageBitmap(album.toBitmap(600, 600));
+        } catch (WriterException e) {
+            e.printStackTrace();
+        }
+    }
 }

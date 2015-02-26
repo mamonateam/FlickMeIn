@@ -112,4 +112,9 @@ public class PicturesFragment extends Fragment {
         adapter.add(pic);
     }
 
+    public void changeAlbum(String id) {
+        adapter.clear();
+        flLoading.setVisibility(View.VISIBLE);
+        PublicFlickrClient.getAlbumPhotos(id, photosHandler);
+    }
 }

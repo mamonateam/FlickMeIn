@@ -13,5 +13,8 @@
     <string name="title_activity_join_album">Join Album</string>
     <string name="title_activity_photo_detail">Photo</string>
     <string name="loader_loading">Loading ...</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+>>>>>>> drawer
 
 </resources>

@@ -353,4 +353,8 @@ public class NewPicturesFragment extends Fragment {
         stream = cr.openInputStream(uri);
         return BitmapFactory.decodeStream(stream, null, options);
     }
+
+    public void changeAlbum(AuthorizedAlbum album) {
+        this.album = album;
+    }
 }

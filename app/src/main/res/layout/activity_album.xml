@@ -1,31 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="#f5f5f5" >
+<com.codepath.apps.flickmein.fragments.FragmentNavigationDrawer xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
 
-    <ViewFlipper
-        android:id="@+id/viewflipper"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <FrameLayout
+    <!-- The main content view -->
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <ViewFlipper
+            android:id="@+id/viewflipper"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="56dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/albumContainer" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/qrContainer"
+                android:layout_marginTop="55dp" />
+        </ViewFlipper>
+
+        <!-- The ActionBar -->
+        <include
+            layout="@layout/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/albumContainer">
-        </FrameLayout>
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/qrContainer">
-        </FrameLayout>
-
-    </ViewFlipper>
-
-</LinearLayout>
+    <!-- The navigation drawer -->
+    <ListView
+        android:id="@+id/lvDrawer"
+        android:layout_width="240dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="singleChoice"
+        android:paddingTop="24dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="0dp"
+        android:background="@android:color/background_light" />
+</com.codepath.apps.flickmein.fragments.FragmentNavigationDrawer>

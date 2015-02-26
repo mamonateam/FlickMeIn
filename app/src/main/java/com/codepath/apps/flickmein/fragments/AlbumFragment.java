@@ -81,4 +81,9 @@ public class AlbumFragment extends Fragment {
         super.onCreate(savedInstanceState);
         album = (AuthorizedAlbum) getArguments().getSerializable("album");
     }
+    
+    public void changeAlbum(AuthorizedAlbum album) {
+        picturesFragment.changeAlbum(String.valueOf(album.getPhotosetId()));
+        newPicturesFragment.changeAlbum(album);
+    }
 }
