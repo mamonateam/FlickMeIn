@@ -16,10 +16,6 @@ import com.google.zxing.integration.android.IntentResult;
 // ToDo: Use color picker
 // ToDo: indeterminate progress in album view
 // ToDo: List of albums...
-// ToDo: Redirect to QR view when album is created {jesus}
-// ToDo: Show QR Flipcard {jesus}
-// ToDo: Detail view from Google Image Search {jesus}
-// ToDo: Link albumcontributor to authorizedalbum {jesus}
 // ToDo: moar styling
 // ToDo: Add Loader while album is created (do not allow to change anything or click send again)
 // ToDo: (Stretch) Make Push notifications using Parse
