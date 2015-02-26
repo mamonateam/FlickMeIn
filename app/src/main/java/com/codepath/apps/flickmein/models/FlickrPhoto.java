@@ -8,9 +8,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class FlickrPhoto extends Model {
+public class FlickrPhoto extends Model implements Serializable {
+
+    private static final long serialVersionUID = 100189L;
+
 	private String uid;
 	private String name;
 	private String url;
